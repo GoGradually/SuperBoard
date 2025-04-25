@@ -1,0 +1,6 @@
+spring:
+  datasource:
+    url: jdbc:h2:tcp://localhost/~/projects/Spring-JdbcTemplate-try-it-out/product-management-system
+    username: sa
+    password:
+    driver-class-name: org.h2.Driver
