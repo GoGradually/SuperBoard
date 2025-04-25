@@ -69,6 +69,26 @@ classDiagram
 		+changeName(String): void
 		+changePrice(int): void
 	}
-```
+	class ProductService {
+        +createProduct(Product product): Product
+        +findProductById(Long id): Product
+        +findAllProducts(): List~Product~
+        +changeName(Long id, String name): Product
+        +changeQuantity(Long id, Long quantity): Product
+        +changePrice(Long id, Long price): Product
+        +deleteProduct(Long id): void
+    }
 
+    class ProductRepository {
+        <<interface>>
+        +save(Product product): Product
+        +findById(Long id): Product
+        +findAll(): List~Product~
+        +deleteById(Long id): void
+    }
+    ProductService --> ProductRepository : 사용
+    ProductService --> Product : 조작
+    ProductRepository --> Product : 영속화
+
+```
 # 패키지 구조
