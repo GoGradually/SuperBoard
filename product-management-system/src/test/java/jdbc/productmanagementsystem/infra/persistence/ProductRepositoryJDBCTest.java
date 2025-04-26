@@ -11,6 +11,8 @@ import org.springframework.boot.test.autoconfigure.jdbc.JdbcTest;
 import org.springframework.context.annotation.Import;
 
 import java.lang.reflect.Field;
+import java.util.List;
+import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
@@ -66,14 +68,52 @@ class ProductRepositoryJDBCTest {
     }
 
     @Test
+    @DisplayName("findById 성공")
     void findById() {
+        Product product = new Product("haha", 20L, 3000L);
+        Product saved = productRepository.save(product);
+
+        Optional<Product> found = productRepository.findById(saved.getId());
+
+        assertThat(found).isPresent();
+        assertThat(found.get().getId()).isEqualTo(saved.getId());
+        assertThat(found.get().getProductName()).isEqualTo("haha");
+        assertThat(found.get().getQuantity()).isEqualTo(20L);
+        assertThat(found.get().getPrice()).isEqualTo(3000L);
     }
 
     @Test
-    void findAll() {
+    @DisplayName("빈 리스트 조회")
+    void findAll1() {
+        List<Product> products = productRepository.findAll();
+
+        assertThat(products).isEmpty();
     }
 
     @Test
+    @DisplayName("2개 이상의 객체 조회")
+    void findAll2() {
+        productRepository.save(new Product("haha", 20L, 3000L));
+        productRepository.save(new Product("hoho", 30L, 4000L));
+
+        List<Product> products = productRepository.findAll();
+
+        assertThat(products).hasSize(2);
+        assertThat(products.get(0).getProductName()).isEqualTo("haha");
+        assertThat(products.get(1).getProductName()).isEqualTo("hoho");
+        assertThat(products.get(0).getQuantity()).isEqualTo(20L);
+        assertThat(products.get(1).getQuantity()).isEqualTo(30L);
+        assertThat(products.get(0).getPrice()).isEqualTo(3000L);
+        assertThat(products.get(1).getPrice()).isEqualTo(4000L);
+    }
+
+    @Test
+    @DisplayName("객체 삭제")
     void deleteById() {
+        Product saved = productRepository.save(new Product("haha", 20L, 3000L));
+
+        productRepository.deleteById(saved.getId());
+
+        assertThat(productRepository.findById(saved.getId())).isEmpty();
     }
 }
