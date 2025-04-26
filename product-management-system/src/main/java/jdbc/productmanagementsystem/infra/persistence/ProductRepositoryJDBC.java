@@ -92,12 +92,11 @@ public class ProductRepositoryJDBC implements ProductRepository {
     }
 
     private static SqlParameterSource getSqlParameterSource(Product product) {
-        return new MapSqlParameterSource(Map.of(
-                "productName", product.getProductName(),
-                "price", product.getPrice(),
-                "quantity", product.getQuantity(),
-                "id", product.getId()
-        ));
+        return new MapSqlParameterSource()
+                .addValue("id", product.getId())
+                .addValue("productName", product.getProductName())
+                .addValue("price", product.getPrice())
+                .addValue("quantity", product.getQuantity());
     }
 
     private static void fillProductId(Product product, KeyHolder keyHolder) {
