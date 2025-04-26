@@ -5,6 +5,7 @@ Spring Data JDBC 를 사용해보기 전에, 기본적인 JDBC 문법을 복습�
 - [README.md](product-management-system/README.md)
 - CRUD
 - JdbcTemplate 기본 문법 학습
+- [학습 내용](https://go-gradually.tistory.com/entry/JdbcTemplate%EC%9D%84-%EC%9D%B4%EC%9A%A9%ED%95%9C-%EC%83%81%ED%92%88-%EA%B4%80%EB%A6%AC-%EA%B8%B0%EB%8A%A5-%EA%B5%AC%ED%98%84%EA%B8%B0)
 
 ### 2. 게시글-댓글 게시판
 
