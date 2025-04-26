@@ -56,8 +56,21 @@
 - 사용자는 갱신된 메인 페이지를 볼 수 있어야 한다.
 - 등록되었던 상품이 영속성 저장소에서 제거되어야 한다.
 
-# 클래스 다이어그램
+# 도메인 모델
+```mermaid
+classDiagram
+	class Product{
+		-id: int
+		-productName: String
+		-quantity: int
+		-price: int
+		+changeQuantity(int): void
+		+changeName(String): void
+		+changePrice(int): void
+	}
+```
 
+# UML 클래스 다이어그램
 ```mermaid
 classDiagram
 	class Product{
@@ -71,7 +84,7 @@ classDiagram
 	}
 	class ProductService {
         +createProduct(Product product): Product
-        +findProductById(Long id): Product
+        +findProductById(Long id): Optional~Product~
         +findAllProducts(): List~Product~
         +changeName(Long id, String name): Product
         +changeQuantity(Long id, Long quantity): Product
@@ -82,13 +95,24 @@ classDiagram
     class ProductRepository {
         <<interface>>
         +save(Product product): Product
-        +findById(Long id): Product
+        +findById(Long id): Optional~Product~
         +findAll(): List~Product~
         +deleteById(Long id): void
+    }
+    class ProductRepositoryJDBC {
+        +save(Product product): Product
+        +findById(Long id): Optional~Product~
+        +findAll(): List~Product~
+        +deleteById(Long id): void
+    }
+    class ProductController{
     }
     ProductService --> ProductRepository : 사용
     ProductService --> Product : 조작
     ProductRepository --> Product : 영속화
-
+    ProductRepositoryJDBC ..|> ProductRepository: 구현
+    ProductController --> ProductService : 사용
+    ProductController --> ProductDTO : 조작
 ```
 # 패키지 구조
+![img.png](img.png)
