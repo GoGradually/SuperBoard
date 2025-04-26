@@ -53,7 +53,10 @@ public class ProductRepositoryJDBC implements ProductRepository {
 
     @Override
     public void deleteById(Long id) {
-
+        int updated = template.update("delete from product where id = :id", Map.of("id", id));
+        if (updated == 0) {
+            throw new ProductNotFoundException("Product not found");
+        }
     }
 
     private Product merge(Product product) {
