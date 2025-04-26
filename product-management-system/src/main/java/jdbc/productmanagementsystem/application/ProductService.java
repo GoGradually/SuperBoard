@@ -24,24 +24,12 @@ public class ProductService {
         return productRepository.findAll();
     }
 
-    public Product changeName(Long id, String name){
+    public Product changeProfile(Long id, Product newProduct){
         Product product = productRepository.findById(id)
                 .orElseThrow(()->new ProductNotFoundException(String.format("Product with id %s not found",id)));
-        product.changeName(name);
-        return productRepository.save(product);
-    }
-
-    public Product changeQuantity(Long id, Long quantity){
-        Product product = productRepository.findById(id)
-                .orElseThrow(()->new ProductNotFoundException(String.format("Product with id %s not found",id)));
-        product.changeQuantity(quantity);
-        return productRepository.save(product);
-    }
-
-    public Product changePrice(Long id, Long price){
-        Product product = productRepository.findById(id)
-                .orElseThrow(()->new ProductNotFoundException(String.format("Product with id %s not found",id)));
-        product.changePrice(price);
+        product.changeName(newProduct.getProductName());
+        product.changePrice(newProduct.getPrice());
+        product.changeQuantity(newProduct.getQuantity());
         return productRepository.save(product);
     }
 
