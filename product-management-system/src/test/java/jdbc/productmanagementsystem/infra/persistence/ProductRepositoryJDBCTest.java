@@ -108,6 +108,12 @@ class ProductRepositoryJDBCTest {
     }
 
     @Test
+    @DisplayName("객체 삭제")
     void deleteById() {
+        Product saved = productRepository.save(new Product("haha", 20L, 3000L));
+
+        productRepository.deleteById(saved.getId());
+
+        assertThat(productRepository.findById(saved.getId())).isEmpty();
     }
 }
