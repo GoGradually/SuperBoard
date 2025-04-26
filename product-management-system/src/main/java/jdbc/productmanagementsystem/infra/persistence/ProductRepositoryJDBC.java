@@ -4,6 +4,8 @@ import jdbc.productmanagementsystem.domain.exception.ProductNotFoundException;
 import jdbc.productmanagementsystem.domain.model.product.Product;
 import jdbc.productmanagementsystem.domain.repository.ProductRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.dao.IncorrectResultSizeDataAccessException;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
@@ -13,6 +15,8 @@ import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 
 import java.lang.reflect.Field;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -34,12 +38,17 @@ public class ProductRepositoryJDBC implements ProductRepository {
 
     @Override
     public Optional<Product> findById(Long id) {
-        return Optional.empty();
+        try{
+            Product product = template.queryForObject("select * from product where id = :id", Map.of("id", id), getProductRowMapper());
+            return Optional.ofNullable(product);
+        }catch (IncorrectResultSizeDataAccessException e){
+            return Optional.empty();
+        }
     }
 
     @Override
     public List<Product> findAll() {
-        return List.of();
+        return template.query("select * from product", getProductRowMapper());
     }
 
     @Override
@@ -63,6 +72,20 @@ public class ProductRepositoryJDBC implements ProductRepository {
         template.update(sql, sqlParameterSource, keyHolder);
         fillProductId(product, keyHolder);
         return product;
+    }
+
+    private static RowMapper<Product> getProductRowMapper() {
+        return (rs, rowNum) -> {
+            Product product = new Product(rs.getString("product_name"), rs.getLong("quantity"), rs.getLong("price"));
+            try {
+                Field id1 = Product.class.getDeclaredField("id");
+                id1.setAccessible(true);
+                id1.set(product, rs.getLong("id"));
+            } catch (NoSuchFieldException | IllegalAccessException e) {
+                throw new RuntimeException(e);
+            }
+            return product;
+        };
     }
 
     private static SqlParameterSource getSqlParameterSource(Product product) {
