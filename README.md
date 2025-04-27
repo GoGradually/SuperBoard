@@ -10,6 +10,7 @@ Spring Data JDBC 를 사용해보기 전에, 기본적인 JDBC 문법을 복습�
 ### 2. 게시글-댓글 게시판 - 현재 구현 중
 - [README.md](board/README.md)
 - 조인
+- 페이징
 - 기본적인 트랜잭션 처리
 - 애그리거트 루트에서 모든 연관 엔티티를 한꺼번에 가져오기 위한 방식 구현
   - Coarse-Grained Locking 방식의 이점 분석
