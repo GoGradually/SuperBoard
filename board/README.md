@@ -185,17 +185,24 @@
 
 
 # 도메인 모델
+- 회원 정보 기능은 가장 간단하게, 랜덤 쿠키값을 부여해서 구분하면 할 수 있겠지만, 현재 프로젝트의 목적이 서비스는 아니므로 건너뛰겠다.
+- 그에 따른 특이사항으로, Comment가 다른 외부 애그리거트(사용자)를 참조할 정도로 독자적인 상호작용을 수행하지 않기 때문에, Comment를 독자적인 애그리거트가 아닌, Post의 Child Entity로 두었다.
 ```mermaid
 classDiagram
     class post {
+        -id: Long
         -title: String
         -contents: String
-        +changeTitle(String): void
-        +changeContents(String): void
+        +changeTitle(String title): void
+        +changeContents(String contents): void
+        +addComment(String commentContents): void
+        +updateCommentContents(Long commentId, String contents): void
+        +removeComment(Long commentId): void
     }
     class comment{
-        contents: String
-        +changeContents(String): void
+        -id: Long
+        -contents: String
+        ~changeContents(String contents): void
     }
     
     post "1"--"*" comment
