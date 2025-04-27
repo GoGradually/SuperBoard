@@ -185,7 +185,21 @@
 
 
 # 도메인 모델
-
+```mermaid
+classDiagram
+    class post {
+        -title: String
+        -contents: String
+        +changeTitle(String): void
+        +changeContents(String): void
+    }
+    class comment{
+        contents: String
+        +changeContents(String): void
+    }
+    
+    post "1"--"*" comment
+```
 
 # UML 클래스 다이어그램
 
