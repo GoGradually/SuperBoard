@@ -1,4 +1,4 @@
-Spring Data JDBC 를 사용해보기 전에, 기본적인 JDBC 문법을 복습하기 위한 토이 프로젝트이다.
+Spring Data JDBC + Spring Data Commons를 이용한 DDD를 적용해보기 전에, 기본적인 JDBC 문법을 복습하기 위한 토이 프로젝트이다.
 
 ### 1. 단일 테이블 상품 재고 관리 - 구현 완료
 
@@ -28,7 +28,7 @@ Spring Data JDBC 를 사용해보기 전에, 기본적인 JDBC 문법을 복습�
 - SimpleJdbcInsert + batchUpdate 혼용
 - 효율적인 트랜잭션 처리 전략 짜보기(미정)
 
-### 5. 은행 계좌이체 시뮬레이터 - 별도 프로젝트로 관리할 예정
+### 5. 은행 계좌이체 시뮬레이터 - 추후 Spring Data JDBC + Spring Data Commons 로 DDD를 적용시킨 프로젝트로 구현할 예정
 
 - 트랜잭션 전파 옵션(REQUIRED, REQUIRES_NEW 등)
 - JdbcTemplate.update()를 이용한 원자적 잔액 조정
