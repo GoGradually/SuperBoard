@@ -1,5 +1,6 @@
-package jdbc.board.infrastructure;
+package jdbc.board.infrastructure.repository;
 
+import jdbc.board.application.port.EventPublisher;
 import jdbc.board.domain.board.exception.PostNotFoundException;
 import jdbc.board.domain.board.model.Post;
 import jdbc.board.domain.board.repository.PostRepository;
@@ -20,6 +21,7 @@ import java.util.Optional;
 @Repository
 public class PostRepositoryJDBC implements PostRepository {
     private final NamedParameterJdbcTemplate template;
+    private final EventPublisher eventPublisher;
 
     @Override
     public Optional<Post> findById(Long id) {
@@ -40,9 +42,12 @@ public class PostRepositoryJDBC implements PostRepository {
     @Override
     public Post save(Post post) {
         if (post.getId() != null) {
-            return merge(post);
+            merge(post);
+        } else {
+            insert(post);
         }
-        return insert(post);
+        post.getDomainEvents().forEach(eventPublisher::publish);
+        return post;
     }
 
     @Override
@@ -73,7 +78,7 @@ public class PostRepositoryJDBC implements PostRepository {
                 """;
         SqlParameterSource sqlParameterSource = getSqlParameterSource(post);
         int updated = template.update(sql, sqlParameterSource);
-        if(updated != 1) {
+        if (updated != 1) {
             throw new PostNotFoundException("해당 게시글을 찾을 수 없습니다.");
         }
         return post;
@@ -92,7 +97,7 @@ public class PostRepositoryJDBC implements PostRepository {
                     );
                 }
                 Long commentId = rs.getObject("comment_id", Long.class);
-                if(commentId != null) {
+                if (commentId != null) {
                     String commentContent = rs.getString("comment_contents");
                     post.attachComment(commentId, commentContent);
                 }
