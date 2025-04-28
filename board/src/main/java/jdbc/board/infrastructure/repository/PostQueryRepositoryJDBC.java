@@ -1,4 +1,4 @@
-package jdbc.board.infrastructure;
+package jdbc.board.infrastructure.repository;
 
 import jdbc.board.application.board.dto.PostLine;
 import jdbc.board.application.board.repository.PostQueryRepository;
