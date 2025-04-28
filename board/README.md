@@ -196,6 +196,7 @@ classDiagram
         +changeTitle(String title): void
         +changeContents(String contents): void
         +addComment(String commentContents): void
+        +attachComment(Long commentId, String commentContents): void
         +updateCommentContents(Long commentId, String contents): void
         +removeComment(Long commentId): void
     }
@@ -204,8 +205,9 @@ classDiagram
         -contents: String
         ~changeContents(String contents): void
     }
-    
+
     post "1"--"*" comment
+
 ```
 
 # UML 클래스 다이어그램
