@@ -7,6 +7,7 @@ import jdbc.board.domain.board.model.Post;
 import jdbc.board.domain.board.repository.PostRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -25,15 +26,36 @@ public class PostService {
         return postQueryRepository.findAllPostLines(page, pageSize);
     }
 
+    @Transactional
     public Post writePost(Post post) {
         return postRepository.save(post);
     }
 
+    @Transactional
     public Post updatePost(Post post) {
         return postRepository.save(post);
     }
 
+    @Transactional
     public void deletePost(Long postId) {
         postRepository.deleteById(postId);
+    }
+
+    @Transactional
+    public Post writeComment(Post post, String contents){
+        post.addComment(contents);
+        return postRepository.save(post);
+    }
+
+    @Transactional
+    public Post updateComment(Post post, Long commentId, String contents){
+        post.changeCommentContents(commentId, contents);
+        return postRepository.save(post);
+    }
+
+    @Transactional
+    public void deleteComment(Post post, Long commentId) {
+        post.removeComment(commentId);
+        postRepository.save(post);
     }
 }
