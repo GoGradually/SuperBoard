@@ -44,6 +44,18 @@ public class Post {
         domainEvents.add(new CommentCreatedDomainEvent(comment));
     }
 
+    /**
+     * 외부 comment가 추가되더라도
+     * 실제 이벤트 퍼블리셔에 코멘트 생성 이벤트가 추가되진 않음
+     * 실제 영속성 데이터에 영향을 끼치진 않지만, 리포지토리에서 Post 애그리거트를 형성하기 위해 필요한 코드.
+     * @param commentId db에서 가져온 comment_id
+     * @param contents db에서 가져온 댓글의 내용
+     */
+    public void attachComment(Long commentId, String contents){
+        Comment comment = new Comment(commentId, this, contents);
+        comments.add(comment);
+    }
+
     public void changeCommentContents(Long commentId, String newContents) {
         Comment comment = comments.stream().filter(cmt -> cmt.getId().equals(commentId)).findFirst()
                 .orElseThrow(() -> new CommentNotFoundException("해당 댓글을 찾을 수 없습니다."));
