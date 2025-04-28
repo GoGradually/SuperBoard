@@ -1,7 +1,9 @@
 package jdbc.board.domain.board.model;
 
 import jdbc.board.domain.board.exception.InvalidContentsException;
+import lombok.AccessLevel;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import java.util.Objects;
 
@@ -16,6 +18,13 @@ public class Comment {
         this.contents = contents;
         this.post = post;
     }
+
+    Comment(Long id, Post post, String contents) {
+        this.id = id;
+        this.post = post;
+        this.contents = contents;
+    }
+
 
     void changeContents(String contents) {
         validateContents(contents);
