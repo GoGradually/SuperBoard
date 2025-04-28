@@ -43,5 +43,6 @@ close #n
 # 변경된 점
 -[x] haha
 
-# UML 클래스 다이어그램
+# 도메인 모델
+mermaid
 ```
