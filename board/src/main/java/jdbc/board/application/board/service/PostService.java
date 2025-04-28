@@ -24,4 +24,16 @@ public class PostService {
     public List<PostLine> findAllPostLines(int page, int pageSize) {
         return postQueryRepository.findAllPostLines(page, pageSize);
     }
+
+    public Post writePost(Post post) {
+        return postRepository.save(post);
+    }
+
+    public Post updatePost(Post post) {
+        return postRepository.save(post);
+    }
+
+    public void deletePost(Long postId) {
+        postRepository.deleteById(postId);
+    }
 }
