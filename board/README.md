@@ -196,6 +196,7 @@ classDiagram
         +changeTitle(String title): void
         +changeContents(String contents): void
         +addComment(String commentContents): void
+        +findComment(Long commentId): Comment
         +attachComment(Long commentId, String commentContents): void
         +updateCommentContents(Long commentId, String contents): void
         +removeComment(Long commentId): void
@@ -210,7 +211,58 @@ classDiagram
 
 ```
 
-# UML 클래스 다이어그램
-
-
 # 패키지 구조
+
+```
+src/main/java/jdbc/board/
+├── BoardApplication.java
+├── application
+│   ├── board
+│   │   ├── dto
+│   │   │   └── PostLine.java
+│   │   ├── handler
+│   │   ├── repository
+│   │   │   └── PostQueryRepository.java
+│   │   └── service
+│   │       └── PostService.java
+│   └── port
+│       └── EventPublisher.java
+├── config
+│   └── EventConfig.java
+├── core
+│   └── MyEventPublisher.java
+├── domain
+│   ├── board
+│   │   ├── event
+│   │   │   ├── CommentCreatedDomainEvent.java
+│   │   │   ├── CommentDeletedDomainEvent.java
+│   │   │   └── CommentUpdatedDomainEvent.java
+│   │   ├── exception
+│   │   │   ├── CommentNotFoundException.java
+│   │   │   ├── InvalidContentsException.java
+│   │   │   ├── InvalidTitleException.java
+│   │   │   └── PostNotFoundException.java
+│   │   ├── model
+│   │   │   ├── Comment.java
+│   │   │   └── Post.java
+│   │   └── repository
+│   │       └── PostRepository.java
+│   └── shared
+│       └── DomainEvent.java
+├── infrastructure
+│   ├── handler
+│   │   └── CommentEventHandler.java
+│   └── repository
+│       ├── CommentDaoJDBC.java
+│       ├── PostQueryRepositoryJDBC.java
+│       └── PostRepositoryJDBC.java
+└── interfaces
+    ├── dto
+    │   ├── CommentRequestDto.java
+    │   ├── CommentResponseDto.java
+    │   ├── PostRequestDto.java
+    │   └── PostResponseDto.java
+    └── web
+        └── PostController.java
+
+```
