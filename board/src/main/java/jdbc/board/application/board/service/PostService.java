@@ -1,5 +1,6 @@
 package jdbc.board.application.board.service;
 
+import jdbc.board.application.board.dto.PageState;
 import jdbc.board.application.board.dto.PostLine;
 import jdbc.board.application.board.repository.PostQueryRepository;
 import jdbc.board.domain.board.exception.PostNotFoundException;
@@ -16,6 +17,8 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 public class PostService {
+    public static final int PAGE_SIZE = 10;
+    public static final int BLOCK_SIZE = 10;
     private final PostRepository postRepository;
     private final PostQueryRepository postQueryRepository;
 
@@ -23,8 +26,22 @@ public class PostService {
         return postRepository.findById(postId).orElseThrow(() -> new PostNotFoundException("게시글을 찾을 수 없습니다."));
     }
 
-    public List<PostLine> findAllPostLines(int page, int pageSize) {
-        return postQueryRepository.findAllPostLines(page - 1, pageSize);
+    public List<PostLine> findAllPostLines(int page) {
+        return postQueryRepository.findAllPostLines(page - 1, PAGE_SIZE);
+    }
+
+    public PageState findPageState(int currentPage) {
+        long totalPosts = postQueryRepository.countAllPosts();
+        int totalPages = (int) Math.ceil((double) totalPosts / PAGE_SIZE);
+
+        int currentBlock = (currentPage - 1) / BLOCK_SIZE;
+        int startPage = currentBlock * BLOCK_SIZE + 1;
+        int endPage = Math.min(startPage + BLOCK_SIZE - 1, totalPages);
+
+        int prevBlockPage = Math.max(startPage - 1, 1);
+        int nextBlockPage = Math.min(endPage + 1, totalPages);
+
+        return new PageState(currentPage, totalPages, startPage, endPage, prevBlockPage, nextBlockPage);
     }
 
     public Comment findCommentDetails(Long postId, Long commentId) {
