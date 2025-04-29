@@ -6,4 +6,6 @@ import java.util.List;
 
 public interface PostQueryRepository {
     List<PostLine> findAllPostLines(int page, int pageSize);
+
+    Long countAllPosts();
 }

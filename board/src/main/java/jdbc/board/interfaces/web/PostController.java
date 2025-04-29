@@ -1,5 +1,6 @@
 package jdbc.board.interfaces.web;
 
+import jdbc.board.application.board.dto.PageState;
 import jdbc.board.application.board.dto.PostLine;
 import jdbc.board.application.board.service.PostService;
 import jdbc.board.domain.board.model.Post;
@@ -22,15 +23,17 @@ public class PostController {
 
     @GetMapping("/")
     public String home(Model model) {
-        List<PostLine> allPostLines = postService.findAllPostLines(1, 10);
+        List<PostLine> allPostLines = postService.findAllPostLines(1);
         model.addAttribute("postLines", allPostLines);
         return "index";
     }
 
     @GetMapping("/post")
     public String post(Model model, @RequestParam(required = false, defaultValue = "1") int page) {
-        List<PostLine> allPostLines = postService.findAllPostLines(page, 10);
+        List<PostLine> allPostLines = postService.findAllPostLines(page);
+        PageState pageState = postService.findPageState(page);
         model.addAttribute("postLines", allPostLines);
+        model.addAttribute("pageState", pageState);
         return "index";
     }
 
