@@ -10,6 +10,7 @@ import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Map;
 
 @Repository
 @RequiredArgsConstructor
@@ -41,5 +42,11 @@ public class PostQueryRepositoryJDBC implements PostQueryRepository {
                         .addValue("pageSize", pageSize)
                         .addValue("startIndex", page*pageSize),
                 postLineRowMapper);
+    }
+
+    @Override
+    public Long countAllPosts() {
+        String sql = "select count(*) from post";
+        return template.queryForObject(sql, Map.of(), Long.class);
     }
 }
