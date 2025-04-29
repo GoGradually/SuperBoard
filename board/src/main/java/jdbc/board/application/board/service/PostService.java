@@ -3,6 +3,7 @@ package jdbc.board.application.board.service;
 import jdbc.board.application.board.dto.PostLine;
 import jdbc.board.application.board.repository.PostQueryRepository;
 import jdbc.board.domain.board.exception.PostNotFoundException;
+import jdbc.board.domain.board.model.Comment;
 import jdbc.board.domain.board.model.Post;
 import jdbc.board.domain.board.repository.PostRepository;
 import lombok.RequiredArgsConstructor;
@@ -23,7 +24,13 @@ public class PostService {
     }
 
     public List<PostLine> findAllPostLines(int page, int pageSize) {
-        return postQueryRepository.findAllPostLines(page, pageSize);
+        return postQueryRepository.findAllPostLines(page - 1, pageSize);
+    }
+
+    public Comment findCommentDetails(Long postId, Long commentId) {
+        return postRepository.findById(postId)
+                .orElseThrow(() -> new PostNotFoundException("게시글을 찾을 수 없습니다."))
+                .findComment(commentId);
     }
 
     @Transactional
@@ -32,7 +39,10 @@ public class PostService {
     }
 
     @Transactional
-    public Post updatePost(Post post) {
+    public Post updatePost(Long postId, String title, String contents) {
+        Post post = postRepository.findById(postId).orElseThrow(() -> new PostNotFoundException("해당 게시글을 찾을 수 없습니다."));
+        post.changeTitle(title);
+        post.changeContents(contents);
         return postRepository.save(post);
     }
 
@@ -42,19 +52,22 @@ public class PostService {
     }
 
     @Transactional
-    public Post writeComment(Post post, String contents){
+    public Post writeComment(Long postId, String contents) {
+        Post post = postRepository.findById(postId).orElseThrow(() -> new PostNotFoundException("해당 게시글을 찾을 수 없습니다."));
         post.addComment(contents);
         return postRepository.save(post);
     }
 
     @Transactional
-    public Post updateComment(Post post, Long commentId, String contents){
+    public Post updateComment(Long postId, Long commentId, String contents) {
+        Post post = postRepository.findById(postId).orElseThrow(() -> new PostNotFoundException("해당 게시글을 찾을 수 없습니다."));
         post.changeCommentContents(commentId, contents);
         return postRepository.save(post);
     }
 
     @Transactional
-    public void deleteComment(Post post, Long commentId) {
+    public void deleteComment(Long postId, Long commentId) {
+        Post post = postRepository.findById(postId).orElseThrow(() -> new PostNotFoundException("해당 게시글을 찾을 수 없습니다."));
         post.removeComment(commentId);
         postRepository.save(post);
     }
