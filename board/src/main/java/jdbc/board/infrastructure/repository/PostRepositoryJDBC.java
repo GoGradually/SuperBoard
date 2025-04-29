@@ -61,14 +61,26 @@ public class PostRepositoryJDBC implements PostRepository {
         }
     }
 
-    private Post insert(Post post) {
-        KeyHolder keyHolder = new GeneratedKeyHolder();
-        String sql = """
-                insert into post (title, contents) values (:title, :contents)
-                """;
-        template.update(sql, getSqlParameterSource(post), keyHolder);
-        fillPostId(post, keyHolder);
-        return post;
+    private static ResultSetExtractor<Post> getPostResultSetExtractor() {
+        return (rs) -> {
+            Post post = null;
+
+            while (rs.next()) {
+                if (post == null) {
+                    post = new Post(
+                            rs.getString("title"),
+                            rs.getString("contents")
+                    );
+                    fillPostId(post, rs.getLong("id"));
+                }
+                Long commentId = rs.getObject("comment_id", Long.class);
+                if (commentId != null) {
+                    String commentContent = rs.getString("comment_contents");
+                    post.attachComment(commentId, commentContent);
+                }
+            }
+            return post;
+        };
     }
 
     private Post merge(Post post) {
@@ -84,36 +96,24 @@ public class PostRepositoryJDBC implements PostRepository {
         return post;
     }
 
-    private static ResultSetExtractor<Post> getPostResultSetExtractor() {
-        return (rs) -> {
-            Post post = null;
-
-            while (rs.next()) {
-                if (post == null) {
-                    post = new Post(
-                            rs.getLong("id"),
-                            rs.getString("title"),
-                            rs.getString("contents")
-                    );
-                }
-                Long commentId = rs.getObject("comment_id", Long.class);
-                if (commentId != null) {
-                    String commentContent = rs.getString("comment_contents");
-                    post.attachComment(commentId, commentContent);
-                }
-            }
-            return post;
-        };
-    }
-
-    private static void fillPostId(Post post, KeyHolder keyHolder) {
+    private static void fillPostId(Post post, Long postId) {
         try {
             Field id = Post.class.getDeclaredField("id");
             id.setAccessible(true);
-            id.set(post, Objects.requireNonNull(keyHolder.getKey()).longValue());
+            id.set(post, postId);
         } catch (NoSuchFieldException | IllegalAccessException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    private Post insert(Post post) {
+        KeyHolder keyHolder = new GeneratedKeyHolder();
+        String sql = """
+                insert into post (title, contents) values (:title, :contents)
+                """;
+        template.update(sql, getSqlParameterSource(post), keyHolder);
+        fillPostId(post, Objects.requireNonNull(keyHolder.getKey()).longValue());
+        return post;
     }
 
 
