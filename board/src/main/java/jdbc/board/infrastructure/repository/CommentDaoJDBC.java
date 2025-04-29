@@ -16,8 +16,9 @@ public class CommentDaoJDBC {
     public void save(Comment comment) {
         if (comment.getId() != null) {
             merge(comment);
+        } else {
+            insert(comment);
         }
-        insert(comment);
     }
 
     public void delete(Comment comment) {
@@ -30,7 +31,7 @@ public class CommentDaoJDBC {
 
     private void insert(Comment comment) {
         String sql = """
-                insert into comment (id, contents, post_id) values (:id, :contents, :post_id)
+                insert into comment (contents, post_id) values (:contents, :post_id)
                 """;
         SqlParameterSource sqlParameterSource = getSqlParameterSource(comment);
         template.update(sql, sqlParameterSource);
@@ -42,7 +43,7 @@ public class CommentDaoJDBC {
                 """;
         SqlParameterSource sqlParameterSource = getSqlParameterSource(comment);
         int updated = template.update(sql, sqlParameterSource);
-        if (updated != 0) {
+        if (updated != 1) {
             throw new CommentNotFoundException("해당 댓글을 찾을 수 없습니다.");
         }
     }

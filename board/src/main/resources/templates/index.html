@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>게시글 목록</title>
+</head>
+<body>
+<h1>게시글 목록</h1>
+
+<div style="margin-bottom: 20px;">
+    <a class="btn btn-primary" th:href="@{/post/new}">글 쓰기</a>
+</div>
+
+<table>
+    <thead>
+    <tr>
+        <th>ID</th>
+        <th>제목</th>
+        <th>댓글 수</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="post : ${postLines}">
+        <td th:text="${post.postId}">1</td>
+        <td>
+            <a th:href="@{/post/{id}(id=${post.postId})}" th:text="${post.postTitle}">제목 예시</a>
+        </td>
+        <td th:text="${post.commentCount}">0</td>
+    </tr>
+    <tr th:if="${#lists.isEmpty(postLines)}">
+        <td colspan="3">게시글이 없습니다.</td>
+    </tr>
+    </tbody>
+</table>
+</body>
+</html>

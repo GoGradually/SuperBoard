@@ -3,10 +3,10 @@ package jdbc.board.domain.board.model;
 import jdbc.board.domain.board.event.CommentCreatedDomainEvent;
 import jdbc.board.domain.board.event.CommentDeletedDomainEvent;
 import jdbc.board.domain.board.event.CommentUpdatedDomainEvent;
-import jdbc.board.domain.shared.DomainEvent;
 import jdbc.board.domain.board.exception.CommentNotFoundException;
 import jdbc.board.domain.board.exception.InvalidContentsException;
 import jdbc.board.domain.board.exception.InvalidTitleException;
+import jdbc.board.domain.shared.DomainEvent;
 import lombok.Getter;
 
 import java.util.ArrayList;
@@ -20,10 +20,9 @@ public class Post {
     private final List<Comment> comments = new ArrayList<>();
     private final List<DomainEvent> domainEvents = new ArrayList<>();
 
-    public Post(Long id, String title, String contents) {
+    public Post(String title, String contents) {
         validateTitle(title);
         validateContents(contents);
-        this.id = id;
         this.title = title;
         this.contents = contents;
     }
@@ -54,6 +53,12 @@ public class Post {
     public void attachComment(Long commentId, String contents){
         Comment comment = new Comment(commentId, this, contents);
         comments.add(comment);
+    }
+
+    // TODO 쿼리 모델로 변경 요망
+    public Comment findComment(Long commentId) {
+        return comments.stream().filter(c -> c.getId().equals(commentId)).findFirst()
+                .orElseThrow(() -> new CommentNotFoundException("댓글을 찾을 수 없습니다."));
     }
 
     public void changeCommentContents(Long commentId, String newContents) {
