@@ -32,7 +32,7 @@ public class PostService {
 
     public PageState findPageState(int currentPage) {
         long totalPosts = postQueryRepository.countAllPosts();
-        int totalPages = (int) Math.ceil((double) totalPosts / PAGE_SIZE);
+        int totalPages = Math.max((int) Math.ceil((double) totalPosts / PAGE_SIZE), 1);
 
         int currentBlock = (currentPage - 1) / BLOCK_SIZE;
         int startPage = currentBlock * BLOCK_SIZE + 1;
