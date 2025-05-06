@@ -22,10 +22,8 @@ public class PostController {
     private final PostService postService;
 
     @GetMapping("/")
-    public String home(Model model) {
-        List<PostLine> allPostLines = postService.findAllPostLines(1);
-        model.addAttribute("postLines", allPostLines);
-        return "index";
+    public String home() {
+        return "redirect:/post";
     }
 
     @GetMapping("/post")
