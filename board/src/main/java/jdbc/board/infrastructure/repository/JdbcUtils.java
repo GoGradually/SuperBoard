@@ -8,6 +8,9 @@ import java.util.Optional;
 
 public class JdbcUtils {
     public static void fillId(Object object, Object id) {
+        if (object == null || id == null) {
+            throw new IllegalArgumentException("object is null");
+        }
         Optional<Field> field = findIdField(object.getClass());
         if (field.isEmpty()) return;
         Field idField = field.get();
