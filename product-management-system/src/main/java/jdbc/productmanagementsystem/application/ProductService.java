@@ -3,15 +3,17 @@ package jdbc.productmanagementsystem.application;
 import jdbc.productmanagementsystem.domain.exception.ProductNotFoundException;
 import jdbc.productmanagementsystem.domain.model.product.Product;
 import jdbc.productmanagementsystem.domain.repository.ProductRepository;
-import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
-@RequiredArgsConstructor
 public class ProductService {
     private final ProductRepository productRepository;
+
+    public ProductService(ProductRepository productRepository) {
+        this.productRepository = productRepository;
+    }
 
     public Product createProduct(Product product){
         return productRepository.save(product);

@@ -3,7 +3,6 @@ package jdbc.productmanagementsystem.infra.persistence;
 import jdbc.productmanagementsystem.domain.exception.ProductNotFoundException;
 import jdbc.productmanagementsystem.domain.model.product.Product;
 import jdbc.productmanagementsystem.domain.repository.ProductRepository;
-import lombok.RequiredArgsConstructor;
 import org.springframework.dao.IncorrectResultSizeDataAccessException;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
@@ -13,16 +12,20 @@ import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 
-import java.lang.reflect.Field;
-import java.util.*;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 
 import static jdbc.productmanagementsystem.infra.persistence.RepositoryJDBCUtils.fillId;
 
 @Repository
-@RequiredArgsConstructor
 public class ProductRepositoryJDBC implements ProductRepository {
 
     private final NamedParameterJdbcTemplate template;
+
+    public ProductRepositoryJDBC(NamedParameterJdbcTemplate template) {
+        this.template = template;
+    }
 
     @Override
     public Product save(Product product) {
