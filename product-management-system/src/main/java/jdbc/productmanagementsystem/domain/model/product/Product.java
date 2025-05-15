@@ -2,10 +2,10 @@ package jdbc.productmanagementsystem.domain.model.product;
 
 import jdbc.productmanagementsystem.domain.exception.InvalidPriceException;
 import jdbc.productmanagementsystem.domain.exception.InvalidQuantityException;
-import lombok.Getter;
+import jdbc.productmanagementsystem.domain.repository.Id;
 
-@Getter
 public class Product {
+    @Id
     private Long id;
     private String productName;
     private Long quantity;
@@ -33,5 +33,21 @@ public class Product {
             throw new InvalidPriceException("가격은 0원 이상이어야 합니다.");
         }
         this.price = newPrice;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public String getProductName() {
+        return productName;
+    }
+
+    public Long getQuantity() {
+        return quantity;
+    }
+
+    public Long getPrice() {
+        return price;
     }
 }

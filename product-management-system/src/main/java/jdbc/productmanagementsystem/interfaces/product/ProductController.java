@@ -3,7 +3,6 @@ package jdbc.productmanagementsystem.interfaces.product;
 import jdbc.productmanagementsystem.application.ProductService;
 import jdbc.productmanagementsystem.domain.model.product.Product;
 import jdbc.productmanagementsystem.interfaces.product.dto.ProductDTO;
-import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -11,9 +10,12 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @Controller
-@RequiredArgsConstructor
 public class ProductController {
     private final ProductService productService;
+
+    public ProductController(ProductService productService) {
+        this.productService = productService;
+    }
 
     @GetMapping("/")
     public String home(Model model) {
