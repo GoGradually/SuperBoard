@@ -11,6 +11,7 @@ Spring Data JDBC + Spring Data Commons를 이용한 DDD를 적용해보기 전�
 - [README.md](board/README.md)
 - 조인
 - 페이징
+- 게시글에 달린 댓글 수를 조회하는 로직 최적화
 - 기본적인 트랜잭션 처리
 - DDD를 최대한 지키면서, Child Entity를 생성/수정/삭제 처리하기 위한 방식 고민
 - 애그리거트 루트에서 모든 연관 엔티티를 한꺼번에 가져오기 위한 방식 구현
@@ -23,12 +24,7 @@ Spring Data JDBC + Spring Data Commons를 이용한 DDD를 적용해보기 전�
 - ResultSetMetaData 또는 DatabaseMetaData를 이용한 동적 컬럼 매핑
 - 대용량 CSV 스트리밍 처리
 
-### 4. 도서 관리 시스템
-
-- SimpleJdbcInsert + batchUpdate 혼용
-- 효율적인 트랜잭션 처리 전략 짜보기(미정)
-
-### 5. 은행 계좌이체 시뮬레이터 - 추후 Spring Data JDBC + Spring Data Commons 로 DDD를 적용시킨 프로젝트로 구현할 예정
+### 4. 은행 계좌이체 시뮬레이터 - 추후 Spring Data JDBC + Spring Data Commons 로 DDD를 적용시킨 프로젝트로 구현할 예정
 
 - 트랜잭션 전파 옵션(REQUIRED, REQUIRES_NEW 등)
 - JdbcTemplate.update()를 이용한 원자적 잔액 조정
@@ -41,7 +37,7 @@ Spring Data JDBC + Spring Data Commons를 이용한 DDD를 적용해보기 전�
 close #n
 
 # 변경된 점
--[x] haha
+- [x] haha
 
 # 도메인 모델
 mermaid
