@@ -7,7 +7,6 @@ import jdbc.board.domain.board.exception.PostNotFoundException;
 import jdbc.board.domain.board.model.Comment;
 import jdbc.board.domain.board.model.Post;
 import jdbc.board.domain.board.repository.PostRepository;
-import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -15,12 +14,16 @@ import java.util.List;
 
 
 @Service
-@RequiredArgsConstructor
 public class PostService {
     public static final int PAGE_SIZE = 10;
     public static final int BLOCK_SIZE = 10;
     private final PostRepository postRepository;
     private final PostQueryRepository postQueryRepository;
+
+    public PostService(PostRepository postRepository, PostQueryRepository postQueryRepository) {
+        this.postRepository = postRepository;
+        this.postQueryRepository = postQueryRepository;
+    }
 
     public Post findPostDetails(Long postId) {
         return postRepository.findById(postId).orElseThrow(() -> new PostNotFoundException("게시글을 찾을 수 없습니다."));

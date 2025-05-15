@@ -4,14 +4,16 @@ import jdbc.board.domain.board.event.CommentCreatedDomainEvent;
 import jdbc.board.domain.board.event.CommentDeletedDomainEvent;
 import jdbc.board.domain.board.event.CommentUpdatedDomainEvent;
 import jdbc.board.infrastructure.repository.CommentDaoJDBC;
-import lombok.RequiredArgsConstructor;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
 
 @Component
-@RequiredArgsConstructor
 public class CommentEventHandler {
     private final CommentDaoJDBC commentRepository;
+
+    public CommentEventHandler(CommentDaoJDBC commentRepository) {
+        this.commentRepository = commentRepository;
+    }
 
     @EventListener
     public void onUpdatedEvent(CommentUpdatedDomainEvent event) {

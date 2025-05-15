@@ -1,13 +1,9 @@
 package jdbc.board.interfaces.dto;
 
 import jdbc.board.domain.board.model.Post;
-import lombok.Getter;
-import lombok.Setter;
 
 import java.util.List;
 
-@Getter
-@Setter
 public class PostResponseDto {
     List<CommentResponseDto> comments;
     private Long id;
@@ -19,5 +15,37 @@ public class PostResponseDto {
         this.title = post.getTitle();
         this.contents = post.getContents();
         this.comments = post.getComments().stream().map(CommentResponseDto::new).toList();
+    }
+
+    public List<CommentResponseDto> getComments() {
+        return comments;
+    }
+
+    public void setComments(List<CommentResponseDto> comments) {
+        this.comments = comments;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public String getContents() {
+        return contents;
+    }
+
+    public void setContents(String contents) {
+        this.contents = contents;
     }
 }

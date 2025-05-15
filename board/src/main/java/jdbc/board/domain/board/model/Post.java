@@ -7,13 +7,13 @@ import jdbc.board.domain.board.exception.CommentNotFoundException;
 import jdbc.board.domain.board.exception.InvalidContentsException;
 import jdbc.board.domain.board.exception.InvalidTitleException;
 import jdbc.board.domain.shared.DomainEvent;
-import lombok.Getter;
+import jdbc.board.domain.shared.Id;
 
 import java.util.ArrayList;
 import java.util.List;
 
-@Getter
 public class Post {
+    @Id
     private Long id;
     private String title;
     private String contents;
@@ -74,6 +74,26 @@ public class Post {
         );
         comments.remove(comment);
         domainEvents.add(new CommentDeletedDomainEvent(comment));
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public String getContents() {
+        return contents;
+    }
+
+    public List<Comment> getComments() {
+        return comments;
+    }
+
+    public List<DomainEvent> getDomainEvents() {
+        return domainEvents;
     }
 
     private static void validateTitle(String title) {

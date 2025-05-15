@@ -2,16 +2,18 @@ package jdbc.board.infrastructure.repository;
 
 import jdbc.board.domain.board.exception.CommentNotFoundException;
 import jdbc.board.domain.board.model.Comment;
-import lombok.RequiredArgsConstructor;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.core.namedparam.SqlParameterSource;
 import org.springframework.stereotype.Repository;
 
 @Repository
-@RequiredArgsConstructor
 public class CommentDaoJDBC {
     private final NamedParameterJdbcTemplate template;
+
+    public CommentDaoJDBC(NamedParameterJdbcTemplate template) {
+        this.template = template;
+    }
 
     public void save(Comment comment) {
         if (comment.getId() != null) {

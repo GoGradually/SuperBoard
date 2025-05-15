@@ -1,16 +1,14 @@
 package jdbc.board.domain.board.model;
 
 import jdbc.board.domain.board.exception.InvalidContentsException;
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import jdbc.board.domain.shared.Id;
 
 import java.util.Objects;
 
-@Getter
 public class Comment {
+    @Id
     private Long id;
-    private Post post;
+    private final Post post;
     private String contents;
 
     Comment(String contents, Post post) {
@@ -25,10 +23,21 @@ public class Comment {
         this.contents = contents;
     }
 
-
     void changeContents(String contents) {
         validateContents(contents);
         this.contents = contents;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public Post getPost() {
+        return post;
+    }
+
+    public String getContents() {
+        return contents;
     }
 
     @Override

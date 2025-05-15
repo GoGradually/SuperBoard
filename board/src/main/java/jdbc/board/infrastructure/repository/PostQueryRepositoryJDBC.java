@@ -2,7 +2,6 @@ package jdbc.board.infrastructure.repository;
 
 import jdbc.board.application.board.dto.PostLine;
 import jdbc.board.application.board.repository.PostQueryRepository;
-import lombok.RequiredArgsConstructor;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
@@ -13,9 +12,12 @@ import java.util.List;
 import java.util.Map;
 
 @Repository
-@RequiredArgsConstructor
 public class PostQueryRepositoryJDBC implements PostQueryRepository {
     private final NamedParameterJdbcTemplate template;
+
+    public PostQueryRepositoryJDBC(NamedParameterJdbcTemplate template) {
+        this.template = template;
+    }
 
     public List<PostLine> findAllPostLines(int page, int pageSize) {
         String sql = """

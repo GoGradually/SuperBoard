@@ -4,7 +4,6 @@ import jdbc.board.application.port.EventPublisher;
 import jdbc.board.domain.board.exception.PostNotFoundException;
 import jdbc.board.domain.board.model.Post;
 import jdbc.board.domain.board.repository.PostRepository;
-import lombok.RequiredArgsConstructor;
 import org.springframework.jdbc.core.ResultSetExtractor;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
@@ -13,15 +12,20 @@ import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 
-import java.lang.reflect.Field;
 import java.util.Objects;
 import java.util.Optional;
 
-@RequiredArgsConstructor
+import static jdbc.board.infrastructure.repository.JdbcUtils.fillId;
+
 @Repository
 public class PostRepositoryJDBC implements PostRepository {
     private final NamedParameterJdbcTemplate template;
     private final EventPublisher eventPublisher;
+
+    public PostRepositoryJDBC(NamedParameterJdbcTemplate template, EventPublisher eventPublisher) {
+        this.template = template;
+        this.eventPublisher = eventPublisher;
+    }
 
     @Override
     public Optional<Post> findById(Long id) {
@@ -61,6 +65,29 @@ public class PostRepositoryJDBC implements PostRepository {
         }
     }
 
+    private Post merge(Post post) {
+        String sql = """
+                update post set title = :title, contents = :contents
+                where id = :id
+                """;
+        SqlParameterSource sqlParameterSource = getSqlParameterSource(post);
+        int updated = template.update(sql, sqlParameterSource);
+        if (updated != 1) {
+            throw new PostNotFoundException("해당 게시글을 찾을 수 없습니다.");
+        }
+        return post;
+    }
+
+    private Post insert(Post post) {
+        KeyHolder keyHolder = new GeneratedKeyHolder();
+        String sql = """
+                insert into post (title, contents) values (:title, :contents)
+                """;
+        template.update(sql, getSqlParameterSource(post), keyHolder);
+        fillPostId(post, Objects.requireNonNull(keyHolder.getKey()).longValue());
+        return post;
+    }
+
     private static ResultSetExtractor<Post> getPostResultSetExtractor() {
         return (rs) -> {
             Post post = null;
@@ -83,37 +110,8 @@ public class PostRepositoryJDBC implements PostRepository {
         };
     }
 
-    private Post merge(Post post) {
-        String sql = """
-                update post set title = :title, contents = :contents
-                where id = :id
-                """;
-        SqlParameterSource sqlParameterSource = getSqlParameterSource(post);
-        int updated = template.update(sql, sqlParameterSource);
-        if (updated != 1) {
-            throw new PostNotFoundException("해당 게시글을 찾을 수 없습니다.");
-        }
-        return post;
-    }
-
     private static void fillPostId(Post post, Long postId) {
-        try {
-            Field id = Post.class.getDeclaredField("id");
-            id.setAccessible(true);
-            id.set(post, postId);
-        } catch (NoSuchFieldException | IllegalAccessException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-    private Post insert(Post post) {
-        KeyHolder keyHolder = new GeneratedKeyHolder();
-        String sql = """
-                insert into post (title, contents) values (:title, :contents)
-                """;
-        template.update(sql, getSqlParameterSource(post), keyHolder);
-        fillPostId(post, Objects.requireNonNull(keyHolder.getKey()).longValue());
-        return post;
+        fillId(post, postId);
     }
 
 
