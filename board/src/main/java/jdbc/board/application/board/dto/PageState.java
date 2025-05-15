@@ -1,10 +1,5 @@
 package jdbc.board.application.board.dto;
 
-import lombok.Getter;
-import lombok.Setter;
-
-@Getter
-@Setter
 public class PageState {
     private int currentPage;
     private int totalPages;
@@ -19,6 +14,54 @@ public class PageState {
         this.startPage = startPage;
         this.endPage = endPage;
         this.prevBlockPage = prevBlockPage;
+        this.nextBlockPage = nextBlockPage;
+    }
+
+    public int getCurrentPage() {
+        return currentPage;
+    }
+
+    public void setCurrentPage(int currentPage) {
+        this.currentPage = currentPage;
+    }
+
+    public int getTotalPages() {
+        return totalPages;
+    }
+
+    public void setTotalPages(int totalPages) {
+        this.totalPages = totalPages;
+    }
+
+    public int getStartPage() {
+        return startPage;
+    }
+
+    public void setStartPage(int startPage) {
+        this.startPage = startPage;
+    }
+
+    public int getEndPage() {
+        return endPage;
+    }
+
+    public void setEndPage(int endPage) {
+        this.endPage = endPage;
+    }
+
+    public int getPrevBlockPage() {
+        return prevBlockPage;
+    }
+
+    public void setPrevBlockPage(int prevBlockPage) {
+        this.prevBlockPage = prevBlockPage;
+    }
+
+    public int getNextBlockPage() {
+        return nextBlockPage;
+    }
+
+    public void setNextBlockPage(int nextBlockPage) {
         this.nextBlockPage = nextBlockPage;
     }
 }

@@ -8,7 +8,6 @@ import jdbc.board.interfaces.dto.CommentRequestDto;
 import jdbc.board.interfaces.dto.CommentResponseDto;
 import jdbc.board.interfaces.dto.PostRequestDto;
 import jdbc.board.interfaces.dto.PostResponseDto;
-import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -17,9 +16,12 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import java.util.List;
 
 @Controller
-@RequiredArgsConstructor
 public class PostController {
     private final PostService postService;
+
+    public PostController(PostService postService) {
+        this.postService = postService;
+    }
 
     @GetMapping("/")
     public String home() {

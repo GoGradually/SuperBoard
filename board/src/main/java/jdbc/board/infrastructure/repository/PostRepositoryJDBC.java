@@ -4,7 +4,6 @@ import jdbc.board.application.port.EventPublisher;
 import jdbc.board.domain.board.exception.PostNotFoundException;
 import jdbc.board.domain.board.model.Post;
 import jdbc.board.domain.board.repository.PostRepository;
-import lombok.RequiredArgsConstructor;
 import org.springframework.jdbc.core.ResultSetExtractor;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
@@ -17,11 +16,15 @@ import java.lang.reflect.Field;
 import java.util.Objects;
 import java.util.Optional;
 
-@RequiredArgsConstructor
 @Repository
 public class PostRepositoryJDBC implements PostRepository {
     private final NamedParameterJdbcTemplate template;
     private final EventPublisher eventPublisher;
+
+    public PostRepositoryJDBC(NamedParameterJdbcTemplate template, EventPublisher eventPublisher) {
+        this.template = template;
+        this.eventPublisher = eventPublisher;
+    }
 
     @Override
     public Optional<Post> findById(Long id) {
