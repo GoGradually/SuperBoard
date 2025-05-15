@@ -7,11 +7,13 @@ import jdbc.board.domain.board.exception.CommentNotFoundException;
 import jdbc.board.domain.board.exception.InvalidContentsException;
 import jdbc.board.domain.board.exception.InvalidTitleException;
 import jdbc.board.domain.shared.DomainEvent;
+import jdbc.board.domain.shared.Id;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class Post {
+    @Id
     private Long id;
     private String title;
     private String contents;

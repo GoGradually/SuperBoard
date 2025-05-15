@@ -1,10 +1,12 @@
 package jdbc.board.domain.board.model;
 
 import jdbc.board.domain.board.exception.InvalidContentsException;
+import jdbc.board.domain.shared.Id;
 
 import java.util.Objects;
 
 public class Comment {
+    @Id
     private Long id;
     private final Post post;
     private String contents;
