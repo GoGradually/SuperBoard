@@ -37,7 +37,7 @@ Spring Data JDBC + Spring Data Commons를 이용한 DDD를 적용해보기 전�
 close #n
 
 # 변경된 점
--[x] haha
+- [x] haha
 
 # 도메인 모델
 mermaid
