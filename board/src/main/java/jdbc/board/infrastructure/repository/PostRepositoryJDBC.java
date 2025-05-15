@@ -12,9 +12,10 @@ import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 
-import java.lang.reflect.Field;
 import java.util.Objects;
 import java.util.Optional;
+
+import static jdbc.board.infrastructure.repository.JdbcUtils.fillId;
 
 @Repository
 public class PostRepositoryJDBC implements PostRepository {
@@ -64,6 +65,29 @@ public class PostRepositoryJDBC implements PostRepository {
         }
     }
 
+    private Post merge(Post post) {
+        String sql = """
+                update post set title = :title, contents = :contents
+                where id = :id
+                """;
+        SqlParameterSource sqlParameterSource = getSqlParameterSource(post);
+        int updated = template.update(sql, sqlParameterSource);
+        if (updated != 1) {
+            throw new PostNotFoundException("해당 게시글을 찾을 수 없습니다.");
+        }
+        return post;
+    }
+
+    private Post insert(Post post) {
+        KeyHolder keyHolder = new GeneratedKeyHolder();
+        String sql = """
+                insert into post (title, contents) values (:title, :contents)
+                """;
+        template.update(sql, getSqlParameterSource(post), keyHolder);
+        fillPostId(post, Objects.requireNonNull(keyHolder.getKey()).longValue());
+        return post;
+    }
+
     private static ResultSetExtractor<Post> getPostResultSetExtractor() {
         return (rs) -> {
             Post post = null;
@@ -86,37 +110,8 @@ public class PostRepositoryJDBC implements PostRepository {
         };
     }
 
-    private Post merge(Post post) {
-        String sql = """
-                update post set title = :title, contents = :contents
-                where id = :id
-                """;
-        SqlParameterSource sqlParameterSource = getSqlParameterSource(post);
-        int updated = template.update(sql, sqlParameterSource);
-        if (updated != 1) {
-            throw new PostNotFoundException("해당 게시글을 찾을 수 없습니다.");
-        }
-        return post;
-    }
-
     private static void fillPostId(Post post, Long postId) {
-        try {
-            Field id = Post.class.getDeclaredField("id");
-            id.setAccessible(true);
-            id.set(post, postId);
-        } catch (NoSuchFieldException | IllegalAccessException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-    private Post insert(Post post) {
-        KeyHolder keyHolder = new GeneratedKeyHolder();
-        String sql = """
-                insert into post (title, contents) values (:title, :contents)
-                """;
-        template.update(sql, getSqlParameterSource(post), keyHolder);
-        fillPostId(post, Objects.requireNonNull(keyHolder.getKey()).longValue());
-        return post;
+        fillId(post, postId);
     }
 
 
