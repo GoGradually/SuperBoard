@@ -2,10 +2,12 @@ package jdbc.productmanagementsystem.domain.model.product;
 
 import jdbc.productmanagementsystem.domain.exception.InvalidPriceException;
 import jdbc.productmanagementsystem.domain.exception.InvalidQuantityException;
+import jdbc.productmanagementsystem.domain.repository.Id;
 import lombok.Getter;
 
 @Getter
 public class Product {
+    @Id
     private Long id;
     private String productName;
     private Long quantity;
