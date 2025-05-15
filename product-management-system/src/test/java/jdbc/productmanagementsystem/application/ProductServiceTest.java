@@ -70,9 +70,10 @@ class ProductServiceTest {
         when(productRepository.findById(product.getId())).thenReturn(Optional.empty());
         // when, then
         assertThatThrownBy(
-                () -> productService.findProductById(product.getId()),
-                "Product with id %d not found.",
-                ProductNotFoundException.class);
+                () -> productService.findProductById(product.getId()))
+                .isInstanceOf(ProductNotFoundException.class)
+                .hasMessageContaining("Product with id ")
+                .hasMessageContaining("not found");
     }
 
     @Test
@@ -124,9 +125,10 @@ class ProductServiceTest {
         when(productRepository.findById(product.getId())).thenReturn(Optional.empty());
 
         // when, then
-        assertThatThrownBy(() -> productService.changeProfile(product.getId(), product),
-                "Product with id %d not found.",
-                ProductNotFoundException.class);
+        assertThatThrownBy(() -> productService.changeProfile(product.getId(), product))
+                .isInstanceOf(ProductNotFoundException.class)
+                .hasMessageContaining("Product with id ")
+                .hasMessageContaining("not found");
 
     }
 
@@ -137,7 +139,7 @@ class ProductServiceTest {
         doNothing().when(productRepository).deleteById(product.getId());
 
         // when
-        productRepository.deleteById(product.getId());
+        productService.deleteProduct(product.getId());
 
         // then
         verify(productRepository).deleteById(product.getId());

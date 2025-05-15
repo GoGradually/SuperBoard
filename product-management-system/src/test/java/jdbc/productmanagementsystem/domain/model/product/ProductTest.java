@@ -43,7 +43,9 @@ class ProductTest {
         Product product = getSampleProduct();
 
         //when, then
-        assertThatThrownBy(() -> product.changeQuantity(-1L), "수량은 0개 이상이어야 합니다.", InvalidQuantityException.class);
+        assertThatThrownBy(() -> product.changeQuantity(-1L))
+                .isInstanceOf(InvalidQuantityException.class)
+                .hasMessage("수량은 0개 이상이어야 합니다.");
     }
 
     @Test
@@ -64,6 +66,8 @@ class ProductTest {
         //given
         Product product = getSampleProduct();
         //when, then
-        assertThatThrownBy(() -> product.changePrice(-3000L), "가격은 0원 이상이어야 합니다.", InvalidPriceException.class);
+        assertThatThrownBy(() -> product.changePrice(-3000L))
+                .isInstanceOf(InvalidPriceException.class)
+                .hasMessage("가격은 0원 이상이어야 합니다.");
     }
 }
