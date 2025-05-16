@@ -104,7 +104,7 @@ public class Post {
 
     private static void validateContents(String contents) {
         if (contents.isBlank()) {
-            throw new InvalidContentsException("댓글은 비어 있을 수 없습니다.");
+            throw new InvalidContentsException("내용은 비어 있을 수 없습니다.");
         }
     }
 }
