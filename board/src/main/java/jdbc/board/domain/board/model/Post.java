@@ -37,6 +37,11 @@ public class Post {
         this.contents = newContents;
     }
 
+    /**
+     * Comment 객체의 생성이 Post를 통해서만 진행되도록 진입점 역할 수행
+     *
+     * @param contents 새로 생성할 댓글의 내용
+     */
     public void addComment(String contents) {
         Comment comment = new Comment(contents, this);
         comments.add(comment);
