@@ -11,6 +11,7 @@ import jdbc.board.domain.shared.Id;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class Post {
     @Id
@@ -99,6 +100,18 @@ public class Post {
 
     public List<DomainEvent> getDomainEvents() {
         return domainEvents;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o == null || getClass() != o.getClass()) return false;
+        Post post = (Post) o;
+        return Objects.equals(id, post.id) && Objects.equals(title, post.title) && Objects.equals(contents, post.contents);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, title, contents);
     }
 
     private static void validateTitle(String title) {
