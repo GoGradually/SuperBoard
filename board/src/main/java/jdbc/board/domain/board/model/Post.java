@@ -11,6 +11,7 @@ import jdbc.board.domain.shared.Id;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class Post {
     @Id
@@ -37,6 +38,11 @@ public class Post {
         this.contents = newContents;
     }
 
+    /**
+     * Comment 객체의 생성이 Post를 통해서만 진행되도록 진입점 역할 수행
+     *
+     * @param contents 새로 생성할 댓글의 내용
+     */
     public void addComment(String contents) {
         Comment comment = new Comment(contents, this);
         comments.add(comment);
@@ -96,6 +102,18 @@ public class Post {
         return domainEvents;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (o == null || getClass() != o.getClass()) return false;
+        Post post = (Post) o;
+        return Objects.equals(id, post.id) && Objects.equals(title, post.title) && Objects.equals(contents, post.contents);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, title, contents);
+    }
+
     private static void validateTitle(String title) {
         if (title.isBlank()) {
             throw new InvalidTitleException("제목은 비어 있을 수 없습니다.");
@@ -104,7 +122,7 @@ public class Post {
 
     private static void validateContents(String contents) {
         if (contents.isBlank()) {
-            throw new InvalidContentsException("댓글은 비어 있을 수 없습니다.");
+            throw new InvalidContentsException("내용은 비어 있을 수 없습니다.");
         }
     }
 }

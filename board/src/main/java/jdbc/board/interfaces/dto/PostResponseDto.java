@@ -21,10 +21,6 @@ public class PostResponseDto {
         return comments;
     }
 
-    public void setComments(List<CommentResponseDto> comments) {
-        this.comments = comments;
-    }
-
     public Long getId() {
         return id;
     }
