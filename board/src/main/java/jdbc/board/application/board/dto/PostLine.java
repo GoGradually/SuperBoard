@@ -1,9 +1,12 @@
 package jdbc.board.application.board.dto;
 
 public class PostLine {
-    private final Long postId;
-    private final String postTitle;
-    private final Long commentCount;
+    private Long postId;
+    private String postTitle;
+    private Long commentCount;
+
+    public PostLine() {
+    }
 
     public PostLine(Long postId, String postTitle, Long commentCount) {
         this.postId = postId;
@@ -21,5 +24,17 @@ public class PostLine {
 
     public Long getCommentCount() {
         return commentCount;
+    }
+
+    public void setPostId(Long postId) {
+        this.postId = postId;
+    }
+
+    public void setPostTitle(String postTitle) {
+        this.postTitle = postTitle;
+    }
+
+    public void setCommentCount(Long commentCount) {
+        this.commentCount = commentCount;
     }
 }
