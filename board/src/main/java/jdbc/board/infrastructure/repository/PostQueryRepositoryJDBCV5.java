@@ -6,16 +6,20 @@ import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
-import org.springframework.stereotype.Repository;
 
 import java.util.List;
 import java.util.Map;
 
-@Repository
-public class PostQueryRepositoryJDBC implements PostQueryRepository {
+
+/**
+ * PostQueryRepository Version.5
+ * Version2, 3 두가지의 개선을 합친 형태로 최적화하였다.
+ * 코드 자체는 V3과 동일하나, DB에서 인덱스를 추가하였다.
+ */
+public class PostQueryRepositoryJDBCV5 implements PostQueryRepository {
     private final NamedParameterJdbcTemplate template;
 
-    public PostQueryRepositoryJDBC(NamedParameterJdbcTemplate template) {
+    public PostQueryRepositoryJDBCV5(NamedParameterJdbcTemplate template) {
         this.template = template;
     }
 
@@ -31,8 +35,7 @@ public class PostQueryRepositoryJDBC implements PostQueryRepository {
                     comment c
                   ON p.id = c.post_id
                 GROUP BY
-                    p.id,
-                    p.title
+                    p.id
                 ORDER BY p.id DESC
                 LIMIT :pageSize
                 OFFSET :startIndex
@@ -42,7 +45,7 @@ public class PostQueryRepositoryJDBC implements PostQueryRepository {
         return template.query(sql,
                 new MapSqlParameterSource()
                         .addValue("pageSize", pageSize)
-                        .addValue("startIndex", page*pageSize),
+                        .addValue("startIndex", page * pageSize),
                 postLineRowMapper);
     }
 

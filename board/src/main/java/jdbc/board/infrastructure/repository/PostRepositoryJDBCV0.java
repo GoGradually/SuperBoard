@@ -10,19 +10,21 @@ import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.core.namedparam.SqlParameterSource;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
-import org.springframework.stereotype.Repository;
 
 import java.util.Objects;
 import java.util.Optional;
 
 import static jdbc.board.infrastructure.repository.JdbcUtils.fillId;
 
-@Repository
-public class PostRepositoryJDBC implements PostRepository {
+/**
+ * PostRepository 최초 버전
+ * 개선 과정을 담기 위한 파일
+ */
+public class PostRepositoryJDBCV0 implements PostRepository {
     private final NamedParameterJdbcTemplate template;
     private final EventPublisher eventPublisher;
 
-    public PostRepositoryJDBC(NamedParameterJdbcTemplate template, EventPublisher eventPublisher) {
+    public PostRepositoryJDBCV0(NamedParameterJdbcTemplate template, EventPublisher eventPublisher) {
         this.template = template;
         this.eventPublisher = eventPublisher;
     }
@@ -65,7 +67,7 @@ public class PostRepositoryJDBC implements PostRepository {
         }
     }
 
-    private Post merge(Post post) {
+    private void merge(Post post) {
         String sql = """
                 update post set title = :title, contents = :contents
                 where id = :id
@@ -75,17 +77,15 @@ public class PostRepositoryJDBC implements PostRepository {
         if (updated != 1) {
             throw new PostNotFoundException("해당 게시글을 찾을 수 없습니다.");
         }
-        return post;
     }
 
-    private Post insert(Post post) {
+    private void insert(Post post) {
         KeyHolder keyHolder = new GeneratedKeyHolder();
         String sql = """
                 insert into post (title, contents) values (:title, :contents)
                 """;
         template.update(sql, getSqlParameterSource(post), keyHolder);
         fillPostId(post, Objects.requireNonNull(keyHolder.getKey()).longValue());
-        return post;
     }
 
     private static ResultSetExtractor<Post> getPostResultSetExtractor() {
