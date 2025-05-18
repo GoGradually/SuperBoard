@@ -7,13 +7,13 @@ Spring Data JDBC + Spring Data Commons를 이용한 DDD를 적용해보기 전�
 - JdbcTemplate 기본 문법 학습
 - [학습, 고민 내용](https://go-gradually.tistory.com/entry/JdbcTemplate%EC%9D%84-%EC%9D%B4%EC%9A%A9%ED%95%9C-%EC%83%81%ED%92%88-%EA%B4%80%EB%A6%AC-%EA%B8%B0%EB%8A%A5-%EA%B5%AC%ED%98%84%EA%B8%B0)
 
-### 2. 게시글-댓글 게시판 - 구현 완료
+### 2. 게시글-댓글 게시판 - 추가 개선 중
 - [README.md](board/README.md)
 - 조인
 - 페이징
-- 게시글에 달린 댓글 수를 조회하는 로직 최적화
+- [게시글에 달린 댓글 수를 조회하는 로직 최적화](https://go-gradually.tistory.com/entry/%EA%B2%8C%EC%8B%9C%ED%8C%90-%EB%8C%93%EA%B8%80-%EC%88%98-%EC%A1%B0%ED%9A%8C-%EC%BF%BC%EB%A6%AC-%EC%B5%9C%EC%A0%81%ED%99%94)
 - 기본적인 트랜잭션 처리
-- DDD를 최대한 지키면서, Child Entity를 생성/수정/삭제 처리하기 위한 방식 고민
+- [DDD를 최대한 지키면서, Child Entity를 생성/수정/삭제 처리하기 위한 방식 고민](https://go-gradually.tistory.com/entry/DDD-Child-Entity%EB%A5%BC-%EC%83%9D%EC%84%B1%EC%88%98%EC%A0%95%EC%82%AD%EC%A0%9C%ED%95%98%EB%8A%94-%EB%B0%A9%EB%B2%95)
 - 애그리거트 루트에서 모든 연관 엔티티를 한꺼번에 가져오기 위한 방식 구현
 - [학습, 고민 내용](https://go-gradually.tistory.com/entry/JdbcTemplate%EC%9D%84-%EC%9D%B4%EC%9A%A9%ED%95%9C-%EA%B2%8C%EC%8B%9C%EA%B8%80-%EB%8C%93%EA%B8%80-%EA%B2%8C%EC%8B%9C%ED%8C%90-%EA%B8%B0%EB%8A%A5-%EA%B5%AC%ED%98%84%EA%B8%B0)
 
