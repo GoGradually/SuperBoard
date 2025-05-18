@@ -16,5 +16,3 @@ CREATE TABLE comment
     contents VARCHAR(255) NOT NULL,
     PRIMARY KEY (id)
 );
-
-CREATE INDEX idx_comment_postId ON comment (post_id);
