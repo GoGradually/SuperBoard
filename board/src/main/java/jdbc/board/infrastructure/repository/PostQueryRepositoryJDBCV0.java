@@ -6,16 +6,20 @@ import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
-import org.springframework.stereotype.Repository;
 
 import java.util.List;
 import java.util.Map;
 
-@Repository
-public class PostQueryRepositoryJDBC implements PostQueryRepository {
+
+/**
+ * PostQueryRepository 최초 버전
+ * 풀 스캔 left 조인 -> group by -> order by 수행하는 버전
+ * 개선 과정을 담기 위한 파일
+ */
+public class PostQueryRepositoryJDBCV0 implements PostQueryRepository {
     private final NamedParameterJdbcTemplate template;
 
-    public PostQueryRepositoryJDBC(NamedParameterJdbcTemplate template) {
+    public PostQueryRepositoryJDBCV0(NamedParameterJdbcTemplate template) {
         this.template = template;
     }
 
