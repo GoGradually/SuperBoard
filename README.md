@@ -9,7 +9,6 @@ DDD 및 단위 테스트, DB 설계 및 최적화를 학습하기 위한 토이 
 - 페이징
 - 기본적인 트랜잭션 처리
 - 애그리거트 루트에서 모든 연관 엔티티를 한꺼번에 가져오기 위한 방식 구현
-- ResultSetMetaData 또는 DatabaseMetaData를 이용한 동적 컬럼 매핑
 - [학습, 고민 내용](https://go-gradually.tistory.com/entry/JdbcTemplate%EC%9D%84-%EC%9D%B4%EC%9A%A9%ED%95%9C-%EA%B2%8C%EC%8B%9C%EA%B8%80-%EB%8C%93%EA%B8%80-%EA%B2%8C%EC%8B%9C%ED%8C%90-%EA%B8%B0%EB%8A%A5-%EA%B5%AC%ED%98%84%EA%B8%B0)
 
 ## 아직 구현하지 않은 것
@@ -20,6 +19,7 @@ DDD 및 단위 테스트, DB 설계 및 최적화를 학습하기 위한 토이 
 - [ ] 추천 순위 실시간 랭킹 기능 구현
 - [ ] 조회수 순위 실시간 랭킹 기능 구현
 - [ ] 첨부 파일 업데이트 기능 구현
+- [ ] ResultSetMetaData 또는 DatabaseMetaData를 이용한 동적 컬럼 매핑
 
 # 그라운드 룰
 - 매주 월요일에, **스프린트 계획을 수립**한다.
