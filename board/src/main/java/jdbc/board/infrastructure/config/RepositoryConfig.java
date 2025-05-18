@@ -3,7 +3,7 @@ package jdbc.board.infrastructure.config;
 import jdbc.board.application.board.repository.PostQueryRepository;
 import jdbc.board.application.port.EventPublisher;
 import jdbc.board.domain.board.repository.PostRepository;
-import jdbc.board.infrastructure.repository.PostQueryRepositoryJDBCV0;
+import jdbc.board.infrastructure.repository.PostQueryRepositoryJDBCV4;
 import jdbc.board.infrastructure.repository.PostRepositoryJDBCV0;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -19,6 +19,6 @@ public class RepositoryConfig {
 
     @Bean
     public PostQueryRepository postQueryRepository(NamedParameterJdbcTemplate template) {
-        return new PostQueryRepositoryJDBCV0(template);
+        return new PostQueryRepositoryJDBCV4(template);
     }
 }
