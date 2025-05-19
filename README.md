@@ -107,7 +107,7 @@ src/main/java/jdbc/board/
 - **JaCoCo 기준/레이어 단위로 테스트 커버리지 하한선**를 두고, 해당 기준을 만족하지 않을 시 배포를 중단한다.
     - domain: 90%, branch
     - application: 80%, line
-    - infrastructure: 50%, line
+    - infrastructure: 30%, line
 - 변경에 대처하는 방법이 테이블이 아닌 도메인 모델에서 발생하도록, **도메인 모델 다이어그램을 매 풀 리퀘스트마다 추가**한다.
 - **새로 학습한 내용**에 대하여 블로그 포스팅으로 **기록**을 수행한다.
 
