@@ -4,7 +4,6 @@ on:
   push:
     branches:
       - main
-      - board/chore/54-CI-CD-도입
   pull_request:
     branches:
       - main
