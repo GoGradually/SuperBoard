@@ -14,3 +14,17 @@ jobs:
     steps:
       - name: Hello, World 찍기
         run: echo "Hello, World!"
+
+      - name: 현재 위치 확인하기
+        run: |
+          pwd
+          ls
+
+      - name: Checkout code
+        uses: actions/checkout@v4 # 최신 버전 사용 권장
+
+      - name: Set up JDK
+        uses: actions/setup-java@v4 # 최신 버전 사용 권장
+        with:
+          java-version: '21'
+          distribution: 'temurin'
