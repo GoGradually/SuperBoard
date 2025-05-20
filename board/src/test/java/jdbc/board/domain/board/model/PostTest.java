@@ -42,6 +42,18 @@ class PostTest {
     }
 
     @Test
+    void changeTitle_200자_초과_제목() {
+        // given
+        Post post = getSamplePost();
+        String invalidTitle = "hi".repeat(101);
+
+        // when, then
+        assertThatThrownBy(() -> post.changeTitle(invalidTitle))
+                .isInstanceOf(InvalidTitleException.class)
+                .hasMessage("제목의 길이는 200자를 초과할 수 없습니다.");
+    }
+
+    @Test
     void changeContents_성공() {
         // given
         Post post = getSamplePost();
@@ -54,7 +66,7 @@ class PostTest {
     }
 
     @Test
-    void changeContents_비어있는_제목() {
+    void changeContents_비어있는_내용() {
         // given
         Post post = getSamplePost();
 
@@ -62,6 +74,18 @@ class PostTest {
         assertThatThrownBy(() -> post.changeContents("  "))
                 .isInstanceOf(InvalidContentsException.class)
                 .hasMessage("내용은 비어 있을 수 없습니다.");
+    }
+
+    @Test
+    void changeContents_400자_초과_내용() {
+        // given
+        Post post = getSamplePost();
+        String invalidContents = "hi".repeat(201);
+
+        // when, then
+        assertThatThrownBy(() -> post.changeContents(invalidContents))
+                .isInstanceOf(InvalidContentsException.class)
+                .hasMessage("내용의 길이는 400자를 초과할 수 없습니다.");
     }
 
     @Test
@@ -159,6 +183,20 @@ class PostTest {
                 .isInstanceOf(InvalidContentsException.class)
                 .hasMessage("댓글은 비어 있을 수 없습니다.");
 
+    }
+
+    @Test
+    void changeCommentContents_200자_초과() {
+        // given
+        Post post = getSamplePost();
+        post.attachComment(1L, "commentContents");
+
+        String invalidContents = "hi".repeat(101);
+
+        // when, then
+        assertThatThrownBy(() -> post.changeCommentContents(1L, invalidContents))
+                .isInstanceOf(InvalidContentsException.class)
+                .hasMessage("댓글의 길이는 200자를 초과할 수 없습니다.");
     }
 
     @Test

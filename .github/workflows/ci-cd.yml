@@ -15,12 +15,8 @@ jobs:
       - name: Hello, World 찍기
         run: echo "Hello, World!"
 
-      - name: 현재 위치 확인하기
-        run: |
-          pwd
-          ls
-
       # 저장소 코드 체크아웃(현재 해당 리포지토리 코드 가져오기)
+      # 풀 리퀘스트/푸쉬에 있는 ID 값을 이용해 해당 리포지토리 코드를 가져온다.
       - name: Checkout code
         uses: actions/checkout@v4
 
@@ -30,3 +26,67 @@ jobs:
         with:
           java-version: '21'
           distribution: 'temurin'
+
+      # application.yml 및 application-prod.yml 주입 (GitHub Secrets 사용)
+      # Gradle 빌드 전에 수행하여, 빌드 결과에 포함시킴
+      - name: Inject application YAML files from Secrets
+        env:
+          PROD_YML_LOCATION: ./board/src/main/resources
+        run: |
+          echo "애플리케이션 설정 파일 생성"
+          mkdir -p $PROD_YML_LOCATION
+          
+          echo "$(realpath $PROD_YML_LOCATION)"
+
+          if [ -n "${{ secrets.APPLICATION_PROD_YML_CONTENT }}" ]; then
+            echo "application-prod.yml 파일을 생성합니다..."
+            echo "${{ secrets.APPLICATION_PROD_YML_CONTENT }}" > $PROD_YML_LOCATION/application-prod.yml
+            echo "application-prod.yml 파일 생성 완료."
+          else
+            echo "정보: secrets.APPLICATION_PROD_YML_CONTENT 가 없어 application-prod.yml 파일을 생성하지 않습니다."
+          fi
+
+      # gradlew 실행 권한 부여
+      - name: Grant execute permission for gradlew
+        run: chmod +x ./gradlew
+
+      # Gradle을 사용하여 프로젝트 빌드
+      - name: Build with Gradle
+        run: ./gradlew clean build
+
+      - name: Upload coverage reports to Codecov
+        uses: codecov/codecov-action@v5
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+
+      # Docker를 사용하여 배포
+      - name: Deploy with Docker
+        env:
+          # Docker 이미지 이름 및 태그 설정 (프로젝트에 맞게 수정)
+          DOCKER_IMAGE_NAME: "go-gradually/super-board" # 예: myusername/my-spring-app
+          # 실행될 Docker 컨테이너 이름 설정
+          DOCKER_CONTAINER_NAME: "super-board-instance" # 예: my-spring-app-instance
+        run: |
+          set -e # 오류 발생 시 즉시 스크립트 중단
+
+          echo "Docker 배포 시작"
+          # Docker 이미지 태그
+          IMAGE_TAG="latest"
+
+          # 1. Docker 이미지 빌드
+          echo "Docker 이미지 빌드: $DOCKER_IMAGE_NAME:$IMAGE_TAG"
+          docker build -t $DOCKER_IMAGE_NAME:$IMAGE_TAG .
+
+          # 2. 기존 컨테이너 중지 및 삭제 (같은 이름으로 실행 중인 경우)
+          echo "기존 Docker 컨테이너($DOCKER_CONTAINER_NAME) 중지 및 삭제 (존재하는 경우)"
+          docker stop $DOCKER_CONTAINER_NAME || true # 실패해도 계속 진행
+          docker rm $DOCKER_CONTAINER_NAME || true   # 실패해도 계속 진행
+
+          # 3. 새 Docker 컨테이너 실행
+          echo "새 Docker 컨테이너($DOCKER_CONTAINER_NAME) 실행"
+          docker run -d -p 8090:8080 --name $DOCKER_CONTAINER_NAME --network super-board-network --restart unless-stopped $DOCKER_IMAGE_NAME:$IMAGE_TAG
+
+          echo "오래된 Docker 이미지 정리"
+          docker image prune -af || true
+
+          echo "Docker 배포 성공"
