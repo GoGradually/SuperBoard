@@ -1,5 +1,6 @@
 package jdbc.board.domain.board.model;
 
+import jakarta.persistence.*;
 import jdbc.board.domain.board.event.CommentCreatedDomainEvent;
 import jdbc.board.domain.board.event.CommentDeletedDomainEvent;
 import jdbc.board.domain.board.event.CommentUpdatedDomainEvent;
@@ -7,19 +8,25 @@ import jdbc.board.domain.board.exception.CommentNotFoundException;
 import jdbc.board.domain.board.exception.InvalidContentsException;
 import jdbc.board.domain.board.exception.InvalidTitleException;
 import jdbc.board.domain.shared.DomainEvent;
-import jdbc.board.domain.shared.Id;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
+@Entity
 public class Post {
-    @Id
-    private Long id;
+    @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true)
+    private final List<Comment> comments = new ArrayList<>();
     private String title;
     private String contents;
-    private final List<Comment> comments = new ArrayList<>();
+    @Transient
     private final List<DomainEvent> domainEvents = new ArrayList<>();
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    protected Post() {
+    }
 
     public Post(String title, String contents) {
         validateTitle(title);
