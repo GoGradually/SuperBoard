@@ -47,4 +47,54 @@ tasks.named('jacocoTestReport') {
         xml.required = true
         html.required = false
     }
+
+    // 테스트 커버리지 검증에 제외할 디렉토리/클래스 설정
+    classDirectories.setFrom(files(classDirectories.files.collect {
+        fileTree(dir: it, exclude: [
+                '**/*Dto.class',
+                '**/*Request.class',
+                '**/*Response.class',
+                'jdbc/board/config/**'
+        ])
+    }))
 }
+jacocoTestCoverageVerification {
+    dependsOn jacocoTestReport
+
+    violationRules {
+
+        // 기본 규칙 (모든 클래스에 적용)
+        rule {
+            element = 'BUNDLE'
+            limit {
+                counter = 'LINE'
+                value = 'COVEREDRATIO'
+                minimum = 0.60 // 예: 프로젝트 전체 최소 라인 커버리지 70%
+            }
+        }
+
+        // 도메인 테스트 커버리지
+        rule {
+            element = 'PACKAGE'
+            includes = ['jdbc.board.domain']
+            limit {
+                counter = 'BRANCH'
+                value = 'COVEREDRATIO'
+                minimum = 0.70
+            }
+        }
+
+        // 애플리케이션 테스트 커버리지
+        rule {
+            element = 'PACKAGE'
+            includes = ['jdbc.board.application']
+            limit {
+                counter = 'LINE'
+                value = 'COVEREDRATIO'
+                minimum = 0.70 // 예: Service 레이어는 85%
+            }
+        }
+    }
+}
+
+check.dependsOn jacocoTestCoverageVerification
