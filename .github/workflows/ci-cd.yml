@@ -48,7 +48,6 @@ jobs:
 
       # Docker를 사용하여 배포
       - name: Deploy with Docker
-        if: github.ref == 'refs/heads/main' && github.event_name == 'push'
         env:
           # Docker 이미지 이름 및 태그 설정 (프로젝트에 맞게 수정)
           DOCKER_IMAGE_NAME: "GoGradually/SuperBoard" # 예: myusername/my-spring-app
