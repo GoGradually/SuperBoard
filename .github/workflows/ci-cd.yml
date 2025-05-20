@@ -40,9 +40,9 @@ jobs:
       - name: Deploy with Docker
         env:
           # Docker 이미지 이름 및 태그 설정 (프로젝트에 맞게 수정)
-          DOCKER_IMAGE_NAME: "GoGradually/SuperBoard" # 예: myusername/my-spring-app
+          DOCKER_IMAGE_NAME: "go-gradually/super-board" # 예: myusername/my-spring-app
           # 실행될 Docker 컨테이너 이름 설정
-          DOCKER_CONTAINER_NAME: "SuperBoard-instance" # 예: my-spring-app-instance
+          DOCKER_CONTAINER_NAME: "super-board-instance" # 예: my-spring-app-instance
         run: |
           set -e # 오류 발생 시 즉시 스크립트 중단
 
