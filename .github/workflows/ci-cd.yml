@@ -28,6 +28,21 @@ jobs:
           java-version: '21'
           distribution: 'temurin'
 
+      # application.yml 및 application-prod.yml 주입 (GitHub Secrets 사용)
+      # Gradle 빌드 전에 수행하여, 빌드 결과에 포함시킴
+      - name: Inject application YAML files from Secrets
+        run: |
+          echo "애플리케이션 설정 파일을 생성합니다..."
+          mkdir -p ./src/main/resources
+
+          if [ -n "${{ secrets.APPLICATION_PROD_YML_CONTENT }}" ]; then
+            echo "application-prod.yml 파일을 생성합니다..."
+            echo "${{ secrets.APPLICATION_PROD_YML_CONTENT }}" > ./src/main/resources/application-prod.yml
+            echo "application-prod.yml 파일 생성 완료."
+          else
+            echo "정보: secrets.APPLICATION_PROD_YML_CONTENT 가 없어 application-prod.yml 파일을 생성하지 않습니다."
+          fi
+
       # gradlew 실행 권한 부여
       - name: Grant execute permission for gradlew
         run: chmod +x ./gradlew
