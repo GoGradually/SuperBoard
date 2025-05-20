@@ -2,6 +2,7 @@ package jdbc.board.application.board.service;
 
 import jdbc.board.application.board.dto.PageState;
 import jdbc.board.application.board.dto.PostLine;
+import jdbc.board.application.board.exception.PageOverflowedException;
 import jdbc.board.application.board.repository.PostQueryRepository;
 import jdbc.board.application.port.EventPublisher;
 import jdbc.board.domain.board.exception.PostNotFoundException;
@@ -32,22 +33,14 @@ public class PostService {
         return postRepository.findById(postId).orElseThrow(() -> new PostNotFoundException("게시글을 찾을 수 없습니다."));
     }
 
-    public List<PostLine> findAllPostLines(int page) {
-        return postQueryRepository.findAllPostLines(page - 1, PAGE_SIZE);
+    private static void validateCurrentPage(int currentPage, int totalPages) {
+        if (totalPages < currentPage || currentPage < 1) {
+            throw new PageOverflowedException("존재하지 않는 페이지 입니다.");
+        }
     }
 
-    public PageState findPageState(int currentPage) {
-        long totalPosts = postQueryRepository.countAllPosts();
-        int totalPages = Math.max((int) Math.ceil((double) totalPosts / PAGE_SIZE), 1);
-
-        int currentBlock = (currentPage - 1) / BLOCK_SIZE;
-        int startPage = currentBlock * BLOCK_SIZE + 1;
-        int endPage = Math.min(startPage + BLOCK_SIZE - 1, totalPages);
-
-        int prevBlockPage = Math.max(startPage - 1, 1);
-        int nextBlockPage = Math.min(endPage + 1, totalPages);
-
-        return new PageState(currentPage, totalPages, startPage, endPage, prevBlockPage, nextBlockPage);
+    private static int findTotalPageCount(double totalPosts) {
+        return Math.max((int) Math.ceil(totalPosts / PAGE_SIZE), 1);
     }
 
     public Comment findCommentDetails(Long postId, Long commentId) {
@@ -95,4 +88,42 @@ public class PostService {
         post.removeComment(commentId);
         post.getDomainEvents().forEach(eventPublisher::publish);
     }
+
+    private static PageBlockInfo getPageBlockInfo(int currentPage, int totalPageCount) {
+        int currentBlock = (currentPage - 1) / BLOCK_SIZE;
+        int startPage = currentBlock * BLOCK_SIZE + 1;
+        int endPage = Math.min(startPage + BLOCK_SIZE - 1, totalPageCount);
+
+        int prevBlockPage = Math.max(startPage - 1, 1);
+        int nextBlockPage = Math.min(endPage + 1, totalPageCount);
+        return new PageBlockInfo(startPage, endPage, prevBlockPage, nextBlockPage);
+    }
+
+    public List<PostLine> findAllPostLines(int page) {
+        long totalPosts = postQueryRepository.countAllPosts();
+        int totalPageCount = findTotalPageCount((double) totalPosts);
+        validateCurrentPage(page, totalPageCount);
+        return postQueryRepository.findAllPostLines(page - 1, PAGE_SIZE);
+    }
+
+    public PageState findPageState(int currentPage) {
+        long totalPostCount = postQueryRepository.countAllPosts();
+        int totalPageCount = findTotalPageCount((double) totalPostCount);
+        validateCurrentPage(currentPage, totalPageCount);
+
+        PageBlockInfo currentPageBlock = getPageBlockInfo(currentPage, totalPageCount);
+        return new PageState(currentPage, totalPageCount, currentPageBlock.startPage(), currentPageBlock.endPage(), currentPageBlock.prevBlockPage(), currentPageBlock.nextBlockPage());
+    }
+
+    private record PageBlockInfo(int startPage, int endPage, int prevBlockPage, int nextBlockPage) {
+
+
+    }
 }
+
+
+
+
+
+
+
