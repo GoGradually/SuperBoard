@@ -8,6 +8,7 @@ COPY ${JAR_FILE} app.jar
 
 # 애플리케이션 실행 포트 노출
 EXPOSE 8080
+EXPOSE 8081
 
 # prod 프로필 사용하도록 설정
 ENV SPRING_PROFILES_ACTIVE=prod
