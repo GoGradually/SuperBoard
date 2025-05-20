@@ -1,4 +1,7 @@
 DDD 및 단위 테스트, DB 설계 및 최적화를 학습하기 위한 토이 프로젝트이다.
+[![CI/CD](https://github.com/GoGradually/SuperBoard/actions/workflows/ci-cd.yml/badge.svg)](https://github.com/GoGradually/SuperBoard/actions/workflows/ci-cd.yml)
+[![codecov](https://codecov.io/gh/GoGradually/SuperBoard/graph/badge.svg?token=VFHVL9J58Q)](https://codecov.io/gh/GoGradually/SuperBoard)
+
 # 주요 내용
 - **[쿼리 최적화 - 99.9999% 성능 개선](https://go-gradually.tistory.com/entry/%EA%B2%8C%EC%8B%9C%ED%8C%90-%EB%8C%93%EA%B8%80-%EC%88%98-%EC%A1%B0%ED%9A%8C-%EC%BF%BC%EB%A6%AC-%EC%B5%9C%EC%A0%81%ED%99%94)**
 - [게시판 기능 요구사항](board/README.md)
