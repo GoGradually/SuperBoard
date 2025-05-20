@@ -52,18 +52,18 @@ jobs:
 
           # 1. Docker 이미지 빌드
           echo "Docker 이미지 빌드: $DOCKER_IMAGE_NAME:$IMAGE_TAG"
-          sudo docker build -t $DOCKER_IMAGE_NAME:$IMAGE_TAG .
+          docker build -t $DOCKER_IMAGE_NAME:$IMAGE_TAG .
 
           # 2. 기존 컨테이너 중지 및 삭제 (같은 이름으로 실행 중인 경우)
           echo "기존 Docker 컨테이너($DOCKER_CONTAINER_NAME) 중지 및 삭제 (존재하는 경우)"
-          sudo docker stop $DOCKER_CONTAINER_NAME || true # 실패해도 계속 진행
-          sudo docker rm $DOCKER_CONTAINER_NAME || true   # 실패해도 계속 진행
+          docker stop $DOCKER_CONTAINER_NAME || true # 실패해도 계속 진행
+          docker rm $DOCKER_CONTAINER_NAME || true   # 실패해도 계속 진행
 
           # 3. 새 Docker 컨테이너 실행
           echo "새 Docker 컨테이너($DOCKER_CONTAINER_NAME) 실행"
-          sudo docker run -d -p 8090:8080 --name $DOCKER_CONTAINER_NAME --restart unless-stopped $DOCKER_IMAGE_NAME:$IMAGE_TAG
+          docker run -d -p 8090:8080 --name $DOCKER_CONTAINER_NAME --restart unless-stopped $DOCKER_IMAGE_NAME:$IMAGE_TAG
 
           echo "오래된 Docker 이미지 정리"
-          sudo docker image prune -af || true
+          docker image prune -af || true
 
           echo "Docker 배포 성공"
