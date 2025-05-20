@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - main
+      - board/chore/54-CI-CD-도입
   pull_request:
     branches:
       - main
@@ -15,12 +16,8 @@ jobs:
       - name: Hello, World 찍기
         run: echo "Hello, World!"
 
-      - name: 현재 위치 확인하기
-        run: |
-          pwd
-          ls
-
       # 저장소 코드 체크아웃(현재 해당 리포지토리 코드 가져오기)
+      # 풀 리퀘스트/푸쉬에 있는 ID 값을 이용해 해당 리포지토리 코드를 가져온다.
       - name: Checkout code
         uses: actions/checkout@v4
 
