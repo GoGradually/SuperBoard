@@ -1,20 +1,27 @@
 package jdbc.board.domain.board.model;
 
+import jakarta.persistence.*;
 import jdbc.board.domain.board.exception.InvalidContentsException;
-import jdbc.board.domain.shared.Id;
 
 import java.util.Objects;
 
+@Entity
 public class Comment {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private final Post post;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "post_id")
+    private Post post;
     private String contents;
 
     Comment(String contents, Post post) {
         validateContents(contents);
         this.contents = contents;
         this.post = post;
+    }
+
+    protected Comment() {
     }
 
     Comment(Long id, Post post, String contents) {
