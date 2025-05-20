@@ -2,6 +2,7 @@ package jdbc.board.application.board.service;
 
 import jdbc.board.application.board.dto.PageState;
 import jdbc.board.application.board.dto.PostLine;
+import jdbc.board.application.board.exception.PageOverflowedException;
 import jdbc.board.application.board.repository.PostQueryRepository;
 import jdbc.board.application.port.EventPublisher;
 import jdbc.board.domain.board.exception.PostNotFoundException;
@@ -21,6 +22,7 @@ import java.util.Optional;
 import static jdbc.board.application.board.service.PostService.PAGE_SIZE;
 import static jdbc.board.utils.JdbcUtils.*;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -96,6 +98,32 @@ class PostServiceTest {
         assertThat(pageState.getEndPage()).isEqualTo(currentPage);
         assertThat(pageState.getPrevBlockPage()).isEqualTo(currentPage);
         assertThat(pageState.getNextBlockPage()).isEqualTo(currentPage);
+    }
+
+    @Test
+    void findPageState_현재_페이지_초과() {
+        // given
+        Long postCount = 1L;
+        int currentPage = 2;
+        when(postQueryRepository.countAllPosts()).thenReturn(postCount);
+
+        // when, then
+        assertThatThrownBy(() -> postService.findPageState(currentPage))
+                .isInstanceOf(PageOverflowedException.class)
+                .hasMessage("존재하지 않는 페이지 입니다.");
+    }
+
+    @Test
+    void findPageState_음수_페이지() {
+        // given
+        Long postCount = 1L;
+        int currentPage = -1;
+        when(postQueryRepository.countAllPosts()).thenReturn(postCount);
+
+        // when, then
+        assertThatThrownBy(() -> postService.findPageState(currentPage))
+                .isInstanceOf(PageOverflowedException.class)
+                .hasMessage("존재하지 않는 페이지 입니다.");
     }
 
     @Test
