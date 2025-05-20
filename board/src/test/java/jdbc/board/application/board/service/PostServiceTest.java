@@ -3,6 +3,7 @@ package jdbc.board.application.board.service;
 import jdbc.board.application.board.dto.PageState;
 import jdbc.board.application.board.dto.PostLine;
 import jdbc.board.application.board.repository.PostQueryRepository;
+import jdbc.board.application.port.EventPublisher;
 import jdbc.board.domain.board.exception.PostNotFoundException;
 import jdbc.board.domain.board.model.Comment;
 import jdbc.board.domain.board.model.Post;
@@ -10,7 +11,6 @@ import jdbc.board.domain.board.repository.PostRepository;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -32,6 +32,9 @@ class PostServiceTest {
     PostRepository postRepository;
     @Mock
     PostQueryRepository postQueryRepository;
+    @Mock
+    EventPublisher eventPublisher;
+
     @InjectMocks
     private PostService postService;
 
@@ -253,7 +256,6 @@ class PostServiceTest {
     @Test
     void updatePost_성공() {
         // given
-        ArgumentCaptor<Post> captor = ArgumentCaptor.forClass(Post.class);
         long postId = 1L;
         String oldTitle = "hello";
         String oldContents = "hi";
@@ -267,10 +269,8 @@ class PostServiceTest {
 
         // then
         verify(postRepository).findById(postId);
-        verify(postRepository).save(captor.capture());
-        Post saved = captor.getValue();
-        assertThat(saved.getTitle()).isEqualTo(newTitle);
-        assertThat(saved.getContents()).isEqualTo(newContents);
+        assertThat(post.getTitle()).isEqualTo(newTitle);
+        assertThat(post.getContents()).isEqualTo(newContents);
 
     }
 
@@ -299,7 +299,6 @@ class PostServiceTest {
     @Test
     void writeComment_성공() {
         // given
-        ArgumentCaptor<Post> captor = ArgumentCaptor.forClass(Post.class);
         Post post = getSamplePost();
         String commentContents = "hello";
         when(postRepository.findById(post.getId())).thenReturn(Optional.of(post));
@@ -308,13 +307,10 @@ class PostServiceTest {
         postService.writeComment(post.getId(), commentContents);
 
         // then
-        verify(postRepository).save(captor.capture());
-        Post saved = captor.getValue();
-        assertThat(saved.getId()).isEqualTo(post.getId());
-        assertThat(saved.getDomainEvents()).hasSize(1);
-        assertThat(saved.getComments()).hasSize(1);
+        assertThat(post.getDomainEvents()).hasSize(1);
+        assertThat(post.getComments()).hasSize(1);
 
-        Comment comment = saved.getComments().get(0);
+        Comment comment = post.getComments().getFirst();
         assertThat(comment.getContents()).isEqualTo(commentContents);
     }
 
@@ -332,7 +328,6 @@ class PostServiceTest {
     @Test
     void updateComment_성공() {
         // given
-        ArgumentCaptor<Post> captor = ArgumentCaptor.forClass(Post.class);
         Post post = getCommentedPost();
         Long commentId = 1L;
         String newCommentContents = "hello";
@@ -342,10 +337,7 @@ class PostServiceTest {
         postService.updateComment(post.getId(), commentId, newCommentContents);
 
         // then
-        verify(postRepository).save(captor.capture());
-        Post saved = captor.getValue();
-        assertThat(saved.getId()).isEqualTo(post.getId());
-        assertThat(saved.getDomainEvents()).hasSize(1);
+        assertThat(post.getDomainEvents()).hasSize(1);
 
         Comment comment = post.findComment(commentId);
         assertThat(comment.getContents()).isEqualTo(newCommentContents);
@@ -364,7 +356,6 @@ class PostServiceTest {
     @Test
     void deleteComment_성공() {
         // given
-        ArgumentCaptor<Post> captor = ArgumentCaptor.forClass(Post.class);
         long postId = 1L;
         long commentId = 1L;
         Post post = getPost(postId, "title", "postContents");
@@ -375,11 +366,9 @@ class PostServiceTest {
         postService.deleteComment(postId, commentId);
 
         // then
-        verify(postRepository).save(captor.capture());
-        Post saved = captor.getValue();
-        assertThat(saved.getId()).isEqualTo(postId);
-        assertThat(saved.getDomainEvents()).hasSize(1);
-        assertThat(saved.getComments()).hasSize(0);
+        assertThat(post.getId()).isEqualTo(postId);
+        assertThat(post.getDomainEvents()).hasSize(1);
+        assertThat(post.getComments()).hasSize(0);
     }
 
     @Test
