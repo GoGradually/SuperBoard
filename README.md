@@ -136,8 +136,6 @@ mermaid
 - [ ] 추천 순위 실시간 랭킹 기능 구현
 - [ ] 조회수 순위 실시간 랭킹 기능 구현
 - [ ] 첨부 파일 업로드 기능 구현
-- [ ] ResultSetMetaData 또는 DatabaseMetaData를 이용한 동적 컬럼 매핑
-
 
 
 
