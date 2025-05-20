@@ -31,13 +31,17 @@ jobs:
       # application.yml 및 application-prod.yml 주입 (GitHub Secrets 사용)
       # Gradle 빌드 전에 수행하여, 빌드 결과에 포함시킴
       - name: Inject application YAML files from Secrets
+        env:
+          PROD_YML_LOCATION: ./board/src/main/resources
         run: |
-          echo "애플리케이션 설정 파일을 생성합니다..."
-          mkdir -p ./src/main/resources
+          echo "애플리케이션 설정 파일 생성"
+          mkdir -p $PROD_YML_LOCATION
+          
+          echo "$(realpath $PROD_YML_LOCATION)"
 
           if [ -n "${{ secrets.APPLICATION_PROD_YML_CONTENT }}" ]; then
             echo "application-prod.yml 파일을 생성합니다..."
-            echo "${{ secrets.APPLICATION_PROD_YML_CONTENT }}" > ./src/main/resources/application-prod.yml
+            echo "${{ secrets.APPLICATION_PROD_YML_CONTENT }}" > $PROD_YML_LOCATION/application-prod.yml
             echo "application-prod.yml 파일 생성 완료."
           else
             echo "정보: secrets.APPLICATION_PROD_YML_CONTENT 가 없어 application-prod.yml 파일을 생성하지 않습니다."
