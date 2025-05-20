@@ -125,11 +125,17 @@ public class Post {
         if (title.isBlank()) {
             throw new InvalidTitleException("제목은 비어 있을 수 없습니다.");
         }
+        if (title.length() > 200) {
+            throw new InvalidTitleException("제목의 길이는 200자를 초과할 수 없습니다.");
+        }
     }
 
     private static void validateContents(String contents) {
         if (contents.isBlank()) {
             throw new InvalidContentsException("내용은 비어 있을 수 없습니다.");
+        }
+        if (contents.length() > 400) {
+            throw new InvalidContentsException("내용의 길이는 400자를 초과할 수 없습니다.");
         }
     }
 }

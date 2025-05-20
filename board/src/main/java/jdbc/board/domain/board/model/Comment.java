@@ -63,5 +63,8 @@ public class Comment {
         if (contents.isBlank()) {
             throw new InvalidContentsException("댓글은 비어 있을 수 없습니다.");
         }
+        if (contents.length() > 200) {
+            throw new InvalidContentsException("댓글의 길이는 200자를 초과할 수 없습니다..");
+        }
     }
 }
