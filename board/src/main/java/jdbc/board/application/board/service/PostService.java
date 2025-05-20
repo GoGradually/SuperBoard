@@ -3,6 +3,7 @@ package jdbc.board.application.board.service;
 import jdbc.board.application.board.dto.PageState;
 import jdbc.board.application.board.dto.PostLine;
 import jdbc.board.application.board.repository.PostQueryRepository;
+import jdbc.board.application.port.EventPublisher;
 import jdbc.board.domain.board.exception.PostNotFoundException;
 import jdbc.board.domain.board.model.Comment;
 import jdbc.board.domain.board.model.Post;
@@ -19,10 +20,12 @@ public class PostService {
     public static final int BLOCK_SIZE = 10;
     private final PostRepository postRepository;
     private final PostQueryRepository postQueryRepository;
+    private final EventPublisher eventPublisher;
 
-    public PostService(PostRepository postRepository, PostQueryRepository postQueryRepository) {
+    public PostService(PostRepository postRepository, PostQueryRepository postQueryRepository, EventPublisher eventPublisher) {
         this.postRepository = postRepository;
         this.postQueryRepository = postQueryRepository;
+        this.eventPublisher = eventPublisher;
     }
 
     public Post findPostDetails(Long postId) {
@@ -63,7 +66,8 @@ public class PostService {
         Post post = postRepository.findById(postId).orElseThrow(() -> new PostNotFoundException("해당 게시글을 찾을 수 없습니다."));
         post.changeTitle(title);
         post.changeContents(contents);
-        return postRepository.save(post);
+        post.getDomainEvents().forEach(eventPublisher::publish);
+        return post;
     }
 
     @Transactional
@@ -72,23 +76,23 @@ public class PostService {
     }
 
     @Transactional
-    public Post writeComment(Long postId, String contents) {
+    public void writeComment(Long postId, String contents) {
         Post post = postRepository.findById(postId).orElseThrow(() -> new PostNotFoundException("해당 게시글을 찾을 수 없습니다."));
         post.addComment(contents);
-        return postRepository.save(post);
+        post.getDomainEvents().forEach(eventPublisher::publish);
     }
 
     @Transactional
-    public Post updateComment(Long postId, Long commentId, String contents) {
+    public void updateComment(Long postId, Long commentId, String contents) {
         Post post = postRepository.findById(postId).orElseThrow(() -> new PostNotFoundException("해당 게시글을 찾을 수 없습니다."));
         post.changeCommentContents(commentId, contents);
-        return postRepository.save(post);
+        post.getDomainEvents().forEach(eventPublisher::publish);
     }
 
     @Transactional
     public void deleteComment(Long postId, Long commentId) {
         Post post = postRepository.findById(postId).orElseThrow(() -> new PostNotFoundException("해당 게시글을 찾을 수 없습니다."));
         post.removeComment(commentId);
-        postRepository.save(post);
+        post.getDomainEvents().forEach(eventPublisher::publish);
     }
 }
