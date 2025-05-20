@@ -10,7 +10,7 @@ on:
 
 jobs:
   build-and-deploy:
-    runs-on: romad-B660M-HDVP-D5-R2-0
+    runs-on: [ self-hosted, Linux, X64 ]
     steps:
       - name: Hello, World 찍기
         run: echo "Hello, World!"
