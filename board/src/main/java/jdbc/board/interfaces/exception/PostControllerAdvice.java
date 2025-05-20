@@ -10,8 +10,14 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 
 @ControllerAdvice
 public class PostControllerAdvice {
-    @ExceptionHandler(value = {InvalidContentsException.class, InvalidTitleException.class})
+    @ExceptionHandler(InvalidContentsException.class)
     public String handleContentsException(InvalidContentsException e, Model model) {
+        model.addAttribute("errorMessage", e.getMessage());
+        return "400";
+    }
+
+    @ExceptionHandler(InvalidTitleException.class)
+    public String handleTitleException(InvalidTitleException e, Model model) {
         model.addAttribute("errorMessage", e.getMessage());
         return "400";
     }

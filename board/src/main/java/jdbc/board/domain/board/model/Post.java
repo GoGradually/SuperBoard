@@ -135,7 +135,7 @@ public class Post {
             throw new InvalidContentsException("내용은 비어 있을 수 없습니다.");
         }
         if (contents.length() > 400) {
-            throw new InvalidContentsException("내용의 길이는 200자를 초과할 수 없습니다.");
+            throw new InvalidContentsException("내용의 길이는 400자를 초과할 수 없습니다.");
         }
     }
 }
