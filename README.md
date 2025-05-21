@@ -1,6 +1,8 @@
 DDD 및 단위 테스트, DB 설계 및 최적화를 학습하기 위한 토이 프로젝트이다.
-[![CI/CD](https://github.com/GoGradually/SuperBoard/actions/workflows/ci-cd.yml/badge.svg)](https://github.com/GoGradually/SuperBoard/actions/workflows/ci-cd.yml)
-[![codecov](https://codecov.io/gh/GoGradually/SuperBoard/graph/badge.svg?token=VFHVL9J58Q)](https://codecov.io/gh/GoGradually/SuperBoard)
+
+CI/CD 상태 - [![CI/CD](https://github.com/GoGradually/SuperBoard/actions/workflows/ci-cd.yml/badge.svg)](https://github.com/GoGradually/SuperBoard/actions/workflows/ci-cd.yml)
+
+테스트 코드 커버리지 - [![codecov](https://codecov.io/gh/GoGradually/SuperBoard/graph/badge.svg?token=VFHVL9J58Q)](https://codecov.io/gh/GoGradually/SuperBoard)
 
 # 주요 내용
 
