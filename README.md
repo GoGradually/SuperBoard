@@ -24,8 +24,8 @@ CI/CD 상태 - [![CI/CD](https://github.com/GoGradually/SuperBoard/actions/workf
 ![system-architecture.jpg](docs/system-architecture.jpg)
 
 ## CI/CD 워크플로우
-(작성예정)
 
+![cicd workflows.jpg](docs/cicd%20workflows.jpg)
 ## 도메인 모델
 ```mermaid
 classDiagram
