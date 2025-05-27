@@ -1,0 +1,10 @@
+cors-settings:
+  allowed-origins:
+    - https://board.go-gradually.me
+  allowed-methods:
+    - GET
+    - POST
+    - PUT
+    - DELETE
+  max-age: 3600
+  allow-credentials: true
