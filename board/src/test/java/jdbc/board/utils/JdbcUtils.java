@@ -1,10 +1,13 @@
 package jdbc.board.utils;
 
+import jakarta.persistence.Id;
 import jdbc.board.domain.board.model.Comment;
 import jdbc.board.domain.board.model.Post;
 import org.springframework.test.util.ReflectionTestUtils;
+import org.springframework.util.ReflectionUtils;
 
 import java.lang.reflect.Constructor;
+import java.lang.reflect.Field;
 
 
 public class JdbcUtils {
@@ -15,7 +18,11 @@ public class JdbcUtils {
 
     public static Post getPost(long id, String title, String contents) {
         Post post = new Post(title, contents);
-        setId(post, id);
+        try{
+            setId(post, id);
+        } catch (IllegalAccessException e) {
+            throw new RuntimeException("id값 넣는데 문제 발생");
+        }
         return post;
     }
 
@@ -38,7 +45,14 @@ public class JdbcUtils {
         return declaredConstructor;
     }
 
-    private static void setId(Object entity, long i) {
-        ReflectionTestUtils.setField(entity, "id", i);
+    private static void setId(Object entity, long i) throws IllegalAccessException {
+        Field[] fields = entity.getClass().getDeclaredFields();
+        for (Field field : fields) {
+            if (field.isAnnotationPresent(Id.class)){
+                field.setAccessible(true);
+                field.set(entity, i);
+                break;
+            }
+        }
     }
 }
