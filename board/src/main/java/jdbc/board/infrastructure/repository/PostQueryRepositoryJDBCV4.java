@@ -27,7 +27,7 @@ public class PostQueryRepositoryJDBCV4 implements PostQueryRepository {
                 SELECT
                     p.post_id            AS post_id,
                     p.title         AS post_title,
-                    COUNT(c.id)     AS comment_count
+                    COUNT(c.post_id)     AS comment_count
                 FROM
                     (select post_id, title from post order by post_id desc limit :pageSize offset :startIndex) p
                 LEFT JOIN
