@@ -101,7 +101,7 @@ public class PostController {
     @PostMapping("/post/{id}/comments")
     public ResponseEntity<URI> newComment(@PathVariable Long id, @RequestBody CommentRequestDto commentDto) {
         postService.writeComment(id, commentDto.getContents());
-        URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/post/{id}")
+        URI location = ServletUriComponentsBuilder.fromCurrentContextPath().path("/post/{id}")
                 .buildAndExpand(id).toUri();
         return ResponseEntity.created(location).build();
     }
