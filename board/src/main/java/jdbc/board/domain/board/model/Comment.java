@@ -8,8 +8,9 @@ import java.util.Objects;
 @Entity
 public class Comment {
     @Id
+    @Column(name = "comment_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Long commentId;
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "post_id")
     private Post post;
@@ -25,7 +26,7 @@ public class Comment {
     }
 
     Comment(Long id, Post post, String contents) {
-        this.id = id;
+        this.commentId = id;
         this.post = post;
         this.contents = contents;
     }
@@ -36,7 +37,7 @@ public class Comment {
     }
 
     public Long getId() {
-        return id;
+        return commentId;
     }
 
     public Post getPost() {
@@ -51,12 +52,12 @@ public class Comment {
     public boolean equals(Object o) {
         if (o == null || getClass() != o.getClass()) return false;
         Comment comment = (Comment) o;
-        return Objects.equals(id, comment.id);
+        return Objects.equals(commentId, comment.commentId);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hashCode(id);
+        return Objects.hashCode(commentId);
     }
 
     private static void validateContents(String contents) {

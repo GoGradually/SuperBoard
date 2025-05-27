@@ -19,11 +19,12 @@ public class Post {
     private final List<Comment> comments = new ArrayList<>();
     private String title;
     private String contents;
+    @Id
+    @Column(name = "post_id")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long postId;
     @Transient
     private final List<DomainEvent> domainEvents = new ArrayList<>();
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
 
     protected Post() {
     }
@@ -90,7 +91,7 @@ public class Post {
     }
 
     public Long getId() {
-        return id;
+        return postId;
     }
 
     public String getTitle() {
@@ -113,12 +114,12 @@ public class Post {
     public boolean equals(Object o) {
         if (o == null || getClass() != o.getClass()) return false;
         Post post = (Post) o;
-        return Objects.equals(id, post.id) && Objects.equals(title, post.title) && Objects.equals(contents, post.contents);
+        return Objects.equals(postId, post.postId) && Objects.equals(title, post.title) && Objects.equals(contents, post.contents);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, title, contents);
+        return Objects.hash(postId, title, contents);
     }
 
     private static void validateTitle(String title) {

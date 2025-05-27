@@ -8,6 +8,6 @@ import java.util.Optional;
 
 public interface PostRepository extends JpaRepository<Post, Long> {
 
-    @Query("select p from Post p left join fetch Comment c on p = c.post where p.id = :postId")
+    @Query("select p from Post p left join fetch Comment c on p = c.post where p.postId = :postId")
     Optional<Post> findById(Long postId);
 }

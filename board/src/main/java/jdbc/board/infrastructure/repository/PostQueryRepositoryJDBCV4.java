@@ -25,17 +25,17 @@ public class PostQueryRepositoryJDBCV4 implements PostQueryRepository {
     public List<PostLine> findAllPostLines(int page, int pageSize) {
         String sql = """
                 SELECT
-                    p.id            AS post_id,
+                    p.post_id            AS post_id,
                     p.title         AS post_title,
-                    COUNT(c.id)     AS comment_count
+                    COUNT(c.post_id)     AS comment_count
                 FROM
-                    (select id, title from post order by id desc limit :pageSize offset :startIndex) p
+                    (select post_id, title from post order by post_id desc limit :pageSize offset :startIndex) p
                 LEFT JOIN
                     comment c
-                  ON p.id = c.post_id
+                  ON p.post_id = c.post_id
                 GROUP BY
-                    p.id
-                ORDER BY p.id DESC
+                    p.post_id
+                ORDER BY p.post_id DESC
                 """;
         RowMapper<PostLine> postLineRowMapper = new BeanPropertyRowMapper<>(PostLine.class);
 

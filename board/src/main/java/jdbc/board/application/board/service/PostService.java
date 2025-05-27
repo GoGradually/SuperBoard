@@ -66,10 +66,11 @@ public class PostService {
     }
 
     @Transactional
-    public void updateComment(Long postId, Long commentId, String contents) {
+    public Post updateComment(Long postId, Long commentId, String contents) {
         Post post = postRepository.findById(postId).orElseThrow(() -> new PostNotFoundException("해당 게시글을 찾을 수 없습니다."));
         post.changeCommentContents(commentId, contents);
         post.getDomainEvents().forEach(eventPublisher::publish);
+        return post;
     }
 
     @Transactional
