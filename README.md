@@ -21,7 +21,7 @@ CI/CD 상태 - [![CI/CD](https://github.com/GoGradually/SuperBoard/actions/workf
 
 ## Swagger API 명세
 
-![/swagger-ui/index.html](https://api.board.go-gradually.me/swagger-ui/index.html)
+[/swagger-ui/index.html](https://api.board.go-gradually.me/swagger-ui/index.html)
 
 ## 시스템 아키텍처 다이어그램
 
