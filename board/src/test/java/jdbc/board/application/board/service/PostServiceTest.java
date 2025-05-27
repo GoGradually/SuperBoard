@@ -10,8 +10,11 @@ import jdbc.board.domain.board.model.Comment;
 import jdbc.board.domain.board.model.Post;
 import jdbc.board.domain.board.repository.PostRepository;
 import org.assertj.core.api.Assertions;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -126,11 +129,26 @@ class PostServiceTest {
                 .hasMessage("존재하지 않는 페이지 입니다.");
     }
 
-    @Test
-    void findPageState_게시글_1개() {
+
+    @DisplayName("다양한 게시글 수와 현재 페이지에 따른 페이지 상태를 검증한다.")
+    @ParameterizedTest(name = "게시글 {0}개, 현재 페이지 {1} -> 총 페이지 {2}, 시작 페이지 {3}, 끝 페이지 {4}, 이전 블록 {5}, 다음 블록 {6}")
+    @CsvSource({
+            // postCount, currentPage, expectedTotalPages, expectedStartPage, expectedEndPage, expectedPrevBlockPage, expectedNextBlockPage
+            "0, 1, 1, 1, 1, 1, 1",      // 게시글 0개 (경계값)
+            "1, 1, 1, 1, 1, 1, 1",      // 게시글 1개
+            "10, 1, 1, 1, 1, 1, 1",     // 게시글 10개 (1 페이지)
+            "11, 1, 2, 1, 2, 1, 2",     // 게시글 11개 (2 페이지, 다음 페이지 블록으로 넘어감)
+            "11, 2, 2, 1, 2, 1, 2",     // 게시글 11개, 현재 페이지 2
+            "100, 1, 10, 1, 10, 1, 10",   // 게시글 100개 (10 페이지, 한 페이지 블록 꽉 참)
+            "100, 5, 10, 1, 10, 1, 10",   // 게시글 100개, 현재 페이지 5
+            "100, 10, 10, 1, 10, 1, 10",  // 게시글 100개, 현재 페이지 10
+            "101, 1, 11, 1, 10, 1, 11",   // 게시글 101개 (11 페이지, 다음 페이지 블록 시작)
+            "101, 11, 11, 11, 11, 10, 11", // 게시글 101개, 현재 페이지 11 (다음 페이지 블록)
+            "200, 10, 20, 1, 10, 1, 11",  // 게시글 200개, 현재 페이지 10
+            "200, 11, 20, 11, 20, 10, 20"  // 게시글 200개, 현재 페이지 11 (다음 페이지 블록)
+    })
+    void findPageState_parameterized(Long postCount, int currentPage, int expectedTotalPages, int expectedStartPage, int expectedEndPage, int expectedPrevBlockPage, int expectedNextBlockPage) {
         // given
-        Long postCount = 1L;
-        int currentPage = 1;
         when(postQueryRepository.countAllPosts()).thenReturn(postCount);
 
         // when
@@ -138,106 +156,11 @@ class PostServiceTest {
 
         // then
         assertThat(pageState.getCurrentPage()).isEqualTo(currentPage);
-        assertThat(pageState.getTotalPages()).isEqualTo(1);
-        assertThat(pageState.getStartPage()).isEqualTo(1);
-        assertThat(pageState.getEndPage()).isEqualTo(1);
-        assertThat(pageState.getPrevBlockPage()).isEqualTo(1);
-        assertThat(pageState.getNextBlockPage()).isEqualTo(1);
-    }
-
-    @Test
-    void findPageState_게시글_10개() {
-        // given
-        Long postCount = 10L;
-        int currentPage = 1;
-        when(postQueryRepository.countAllPosts()).thenReturn(postCount);
-
-        // when
-        PageState pageState = postService.findPageState(currentPage);
-
-        // then
-        assertThat(pageState.getCurrentPage()).isEqualTo(currentPage);
-        assertThat(pageState.getTotalPages()).isEqualTo(1);
-        assertThat(pageState.getStartPage()).isEqualTo(1);
-        assertThat(pageState.getEndPage()).isEqualTo(1);
-        assertThat(pageState.getPrevBlockPage()).isEqualTo(1);
-        assertThat(pageState.getNextBlockPage()).isEqualTo(1);
-    }
-
-    @Test
-    void findPageState_게시글_11개() {
-        // given
-        Long postCount = 11L;
-        int currentPage = 1;
-        when(postQueryRepository.countAllPosts()).thenReturn(postCount);
-
-        // when
-        PageState pageState = postService.findPageState(currentPage);
-
-        // then
-        assertThat(pageState.getCurrentPage()).isEqualTo(currentPage);
-        assertThat(pageState.getTotalPages()).isEqualTo(2);
-        assertThat(pageState.getStartPage()).isEqualTo(1);
-        assertThat(pageState.getEndPage()).isEqualTo(2);
-        assertThat(pageState.getPrevBlockPage()).isEqualTo(1);
-        assertThat(pageState.getNextBlockPage()).isEqualTo(2);
-    }
-
-    @Test
-    void findPageState_게시글_100개() {
-        // given
-        Long postCount = 100L;
-        int currentPage = 1;
-        when(postQueryRepository.countAllPosts()).thenReturn(postCount);
-
-        // when
-        PageState pageState = postService.findPageState(currentPage);
-
-        // then
-        assertThat(pageState.getCurrentPage()).isEqualTo(currentPage);
-        assertThat(pageState.getTotalPages()).isEqualTo(10);
-        assertThat(pageState.getStartPage()).isEqualTo(1);
-        assertThat(pageState.getEndPage()).isEqualTo(10);
-        assertThat(pageState.getPrevBlockPage()).isEqualTo(1);
-        assertThat(pageState.getNextBlockPage()).isEqualTo(10);
-    }
-
-    @Test
-    void findPageState_게시글_101개() {
-        // given
-        Long postCount = 101L;
-        int currentPage = 1;
-        when(postQueryRepository.countAllPosts()).thenReturn(postCount);
-
-        // when
-        PageState pageState = postService.findPageState(currentPage);
-
-        // then
-        assertThat(pageState.getCurrentPage()).isEqualTo(currentPage);
-        assertThat(pageState.getTotalPages()).isEqualTo(11);
-        assertThat(pageState.getStartPage()).isEqualTo(1);
-        assertThat(pageState.getEndPage()).isEqualTo(10);
-        assertThat(pageState.getPrevBlockPage()).isEqualTo(1);
-        assertThat(pageState.getNextBlockPage()).isEqualTo(11);
-    }
-
-    @Test
-    void findPageState_게시글_201개_15페이지() {
-        // given
-        Long postCount = 201L;
-        int currentPage = 15;
-        when(postQueryRepository.countAllPosts()).thenReturn(postCount);
-
-        // when
-        PageState pageState = postService.findPageState(currentPage);
-
-        // then
-        assertThat(pageState.getCurrentPage()).isEqualTo(currentPage);
-        assertThat(pageState.getTotalPages()).isEqualTo(21);
-        assertThat(pageState.getStartPage()).isEqualTo(11);
-        assertThat(pageState.getEndPage()).isEqualTo(20);
-        assertThat(pageState.getPrevBlockPage()).isEqualTo(10);
-        assertThat(pageState.getNextBlockPage()).isEqualTo(21);
+        assertThat(pageState.getTotalPages()).isEqualTo(expectedTotalPages);
+        assertThat(pageState.getStartPage()).isEqualTo(expectedStartPage);
+        assertThat(pageState.getEndPage()).isEqualTo(expectedEndPage);
+        assertThat(pageState.getPrevBlockPage()).isEqualTo(expectedPrevBlockPage);
+        assertThat(pageState.getNextBlockPage()).isEqualTo(expectedNextBlockPage);
     }
 
     @Test
