@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.servlet.resource.NoResourceFoundException;
 
 @RestControllerAdvice
+@Order(13)
 public class GlobalControllerAdvice {
     private static final Logger log = LoggerFactory.getLogger(GlobalControllerAdvice.class);
 
