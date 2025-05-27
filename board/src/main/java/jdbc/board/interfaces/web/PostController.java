@@ -21,7 +21,6 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import java.net.URI;
 import java.util.List;
 
-@CrossOrigin
 @RestController
 @Tag(name = "게시글 API", description = "게시글 CRUD를 위한 API")
 public class PostController {
@@ -68,8 +67,8 @@ public class PostController {
                     content = @Content(schema = @Schema(implementation = URI.class))),
             @ApiResponse(responseCode = "400", description = "적절한 게시글의 조건을 만족하지 못했을 경우 - 글자 수 제한, 예외 메시지 확인")
     })
-    @PostMapping("/post/new")
-    public ResponseEntity<URI> newPost(@ModelAttribute PostRequestDto postDto) {
+    @PostMapping("/post")
+    public ResponseEntity<URI> newPost(@RequestBody PostRequestDto postDto) {
         Post post = postService.writePost(new Post(postDto.getTitle(), postDto.getContents()));
         URI location = ServletUriComponentsBuilder.fromCurrentContextPath().path("/post/{id}").build(post.getId());
         return ResponseEntity.created(location).build();
@@ -84,8 +83,8 @@ public class PostController {
             @ApiResponse(responseCode = "400", description = "적절한 게시글의 조건을 만족하지 못했을 경우 - 글자 수 제한, 예외 메시지 확인"),
             @ApiResponse(responseCode = "404", description = "해당 게시글을 찾을 수 없는 경우. 예외 메시지 확인")
     })
-    @PostMapping("/post/{id}/edit")
-    public ResponseEntity<PostResponseDto> editPost(@PathVariable Long id, @ModelAttribute PostRequestDto postDto) {
+    @PutMapping("/post/{id}")
+    public ResponseEntity<PostResponseDto> editPost(@PathVariable Long id, @RequestBody PostRequestDto postDto) {
         Post post = postService.updatePost(id, postDto.getTitle(), postDto.getContents());
         PostResponseDto postResponseDto = new PostResponseDto(post);
         return ResponseEntity.ok(postResponseDto);
@@ -100,7 +99,7 @@ public class PostController {
             @ApiResponse(responseCode = "404", description = "댓글이 작성될 게시글을 찾을 수 없는 경우. 예외 메시지 확인")
     })
     @PostMapping("/post/{id}/comments")
-    public ResponseEntity<URI> newComment(@PathVariable Long id, @ModelAttribute CommentRequestDto commentDto) {
+    public ResponseEntity<URI> newComment(@PathVariable Long id, @RequestBody CommentRequestDto commentDto) {
         postService.writeComment(id, commentDto.getContents());
         URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/post/{id}")
                 .buildAndExpand(id).toUri();
@@ -116,8 +115,8 @@ public class PostController {
             @ApiResponse(responseCode = "400", description = "적절한 댓글의 조건을 만족하지 못했을 경우 - 글자 수 제한, 예외 메시지 확인"),
             @ApiResponse(responseCode = "404", description = "해당 게시글 혹은 댓글을 찾을 수 없는 경우. 예외 메시지 확인")
     })
-    @PostMapping("/post/{id}/comments/{commentId}/edit")
-    public ResponseEntity<PostResponseDto> editComment(@PathVariable Long id, @PathVariable Long commentId, CommentRequestDto commentDto) {
+    @PutMapping("/post/{id}/comments/{commentId}")
+    public ResponseEntity<PostResponseDto> editComment(@PathVariable Long id, @PathVariable Long commentId, @RequestBody CommentRequestDto commentDto) {
         Post post = postService.updateComment(id, commentId, commentDto.getContents());
         return ResponseEntity.ok(new PostResponseDto(post));
     }
