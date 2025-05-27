@@ -1,17 +1,23 @@
 package jdbc.board.infrastructure.config.property;
 
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Positive;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Component
 @ConfigurationProperties(prefix = "cors-settings")
 public class CorsProperties {
-    private List<String> allowedOrigins;
-    private List<String> allowedMethods;
-    private Long maxAge;
-    private Boolean allowCredentials;
+    @NotNull
+    private List<String> allowedOrigins = new ArrayList<>();
+    @NotNull
+    private List<String> allowedMethods = List.of("GET", "POST", "PUT", "DELETE");
+    @Positive
+    private Long maxAge = 3600L;
+    private Boolean allowCredentials = false;
 
     public List<String> getAllowedOrigins() {
         return allowedOrigins;
