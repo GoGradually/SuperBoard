@@ -5,6 +5,7 @@ import jdbc.board.application.board.dto.PageState;
 import jdbc.board.application.board.dto.PostLine;
 import jdbc.board.application.board.exception.PageOverflowedException;
 import jdbc.board.application.board.service.PostService;
+import jdbc.board.domain.board.exception.InvalidTitleException;
 import jdbc.board.domain.board.exception.PostNotFoundException;
 import jdbc.board.domain.board.model.Post;
 import jdbc.board.infrastructure.config.property.CorsProperties;
@@ -28,8 +29,7 @@ import static jdbc.board.utils.JdbcUtils.getPost;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
-import static org.mockito.Mockito.anyInt;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -191,15 +191,63 @@ class PostControllerTest {
 
     @Test
     void editPost_올바르지_않은_서식() throws Exception {
+        // given
+        long postId = 1L;
+        String newTitle = "";
+        String prevContents = "contents";
+
+        PostRequestDto postRequestDto = new PostRequestDto();
+        postRequestDto.setTitle(newTitle);
+        postRequestDto.setContents(prevContents);
+
+        String jsonString = objectMapper.writeValueAsString(postRequestDto);
+
+        when(postService.updatePost(postId, postRequestDto.getTitle(), postRequestDto.getContents())).thenThrow(InvalidTitleException.class);
+
+        // when
+        ResultActions resultActions = mockMvc.perform(put("/post/{postId}", postId)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(jsonString));
+
+        // then
+        resultActions.andExpect(status().isBadRequest());
     }
 
     @Test
     void editPost_존재하지_않는_게시글() throws Exception {
+        // given
+        long postId = 1L;
+        String newTitle = "newTitle";
+        String prevContents = "contents";
 
+        PostRequestDto postRequestDto = new PostRequestDto();
+        postRequestDto.setTitle(newTitle);
+        postRequestDto.setContents(prevContents);
+
+        String jsonString = objectMapper.writeValueAsString(postRequestDto);
+
+        when(postService.updatePost(postId, postRequestDto.getTitle(), postRequestDto.getContents())).thenThrow(PostNotFoundException.class);
+
+        // when
+        ResultActions resultActions = mockMvc.perform(put("/post/{postId}", postId)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(jsonString));
+
+        // then
+        resultActions.andExpect(status().isNotFound());
     }
 
     @Test
     void deletePost_성공() throws Exception {
+        // given
+        long postId = 1L;
+        doNothing().when(postService).deletePost(postId);
+
+        // when
+        ResultActions resultActions = mockMvc.perform(delete("/post/{postId}", postId));
+
+        // then
+        resultActions.andExpect(status().isNoContent());
     }
 }
 
