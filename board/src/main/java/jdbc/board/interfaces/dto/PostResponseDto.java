@@ -1,13 +1,19 @@
 package jdbc.board.interfaces.dto;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import jdbc.board.domain.board.model.Post;
 
 import java.util.List;
 
+@Schema(description = "생성/수정된 게시글의 제목/내용을 담은 DTO")
 public class PostResponseDto {
+    @Schema(description = "댓글의 목록")
     List<CommentResponseDto> comments;
+    @Schema(description = "게시글의 ID")
     private Long id;
+    @Schema(description = "게시글의 제목")
     private String title;
+    @Schema(description = "게시글의 내용")
     private String contents;
 
     public PostResponseDto(Post post) {
