@@ -2,6 +2,13 @@ spring:
   jpa:
     hibernate:
       ddl-auto: create
+  datasource:
+    url: jdbc:h2:mem:testdb
+    driverClassName: org.h2.Driver
+    username: sa
+    password:
+
+
 
 cors-settings:
   allowed-origins:
