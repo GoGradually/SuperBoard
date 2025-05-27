@@ -7,13 +7,13 @@ CI/CD 상태 - [![CI/CD](https://github.com/GoGradually/SuperBoard/actions/workf
 # 주요 내용
 
 ### 시스템 설계/성능 최적화 관점
-- **[쿼리 최적화 - 99.9999% 성능 개선](https://go-gradually.tistory.com/entry/%EA%B2%8C%EC%8B%9C%ED%8C%90-%EB%8C%93%EA%B8%80-%EC%88%98-%EC%A1%B0%ED%9A%8C-%EC%BF%BC%EB%A6%AC-%EC%B5%9C%EC%A0%81%ED%99%94)**
+- **[쿼리 최적화 - 506초->0.001초 성능 개선](https://go-gradually.tistory.com/entry/%EA%B2%8C%EC%8B%9C%ED%8C%90-%EB%8C%93%EA%B8%80-%EC%88%98-%EC%A1%B0%ED%9A%8C-%EC%BF%BC%EB%A6%AC-%EC%B5%9C%EC%A0%81%ED%99%94)**
 
 ### 객체지향 설계 관점
 
 - [**도메인 주도 설계 적용**
   (DDD 학습 내용)](https://dev.go-gradually.me/entry/%EB%8F%84%EB%A9%94%EC%9D%B8-%EC%A3%BC%EB%8F%84-%EC%84%A4%EA%B3%84DDD%EC%9D%98-%ED%95%B5%EC%8B%AC-%EA%B0%9C%EB%85%90-%EC%A0%95%EB%A6%AC)
-- **GRASP 패턴** - 객체 설계 기준(작성예정)
+- [**GRASP 패턴** - 책임 분리 기준](https://go-gradually.tistory.com/entry/%EA%B0%9D%EC%B2%B4%EC%A7%80%ED%96%A5-%ED%8C%A8%EB%9F%AC%EB%8B%A4%EC%9E%84-OOD%EC%99%80-GRASP-%ED%8C%A8%ED%84%B4)
 - [학습, 고민 내용 - JDBC Version](https://go-gradually.tistory.com/entry/JdbcTemplate%EC%9D%84-%EC%9D%B4%EC%9A%A9%ED%95%9C-%EA%B2%8C%EC%8B%9C%EA%B8%80-%EB%8C%93%EA%B8%80-%EA%B2%8C%EC%8B%9C%ED%8C%90-%EA%B8%B0%EB%8A%A5-%EA%B5%AC%ED%98%84%EA%B8%B0)
 - [게시판 기능 요구사항](board/README.md)
 
@@ -21,7 +21,7 @@ CI/CD 상태 - [![CI/CD](https://github.com/GoGradually/SuperBoard/actions/workf
 
 ## Swagger API 명세
 
-![/swagger-ui/index.html](https://api.board.go-gradually.me/swagger-ui/index.html)
+[https://api.board.go-gradually.me/swagger-ui/index.html](https://api.board.go-gradually.me/swagger-ui/index.html)
 
 ## 시스템 아키텍처 다이어그램
 
