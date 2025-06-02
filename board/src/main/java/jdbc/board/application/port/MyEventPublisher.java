@@ -1,6 +1,5 @@
-package jdbc.board.core;
+package jdbc.board.application.port;
 
-import jdbc.board.application.port.EventPublisher;
 import jdbc.board.domain.shared.DomainEvent;
 import org.springframework.context.ApplicationEventPublisher;
 

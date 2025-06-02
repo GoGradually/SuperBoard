@@ -1,12 +1,10 @@
-package jdbc.board.config;
+package jdbc.board.application.config;
 
 import jdbc.board.application.port.EventPublisher;
-import jdbc.board.core.MyEventPublisher;
+import jdbc.board.application.port.MyEventPublisher;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-
-import java.util.EventListener;
 
 @Configuration
 public class EventConfig {
