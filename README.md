@@ -1,8 +1,10 @@
-DDD 및 단위 테스트, DB 설계 및 최적화를 학습하기 위한 토이 프로젝트이다.
-
 CI/CD 상태 - [![CI/CD](https://github.com/GoGradually/SuperBoard/actions/workflows/ci-cd.yml/badge.svg)](https://github.com/GoGradually/SuperBoard/actions/workflows/ci-cd.yml)
 
 테스트 코드 커버리지 - [![codecov](https://codecov.io/gh/GoGradually/SuperBoard/graph/badge.svg?token=VFHVL9J58Q)](https://codecov.io/gh/GoGradually/SuperBoard)
+
+# 주요 목표
+- **사용자 간의 실시간 소통**을 킬러 기능으로 추구한다.
+- 다양한 사용자 간의 실시간 토론이 원할한 구조로 설계한다.
 
 # 주요 내용
 
