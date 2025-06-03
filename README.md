@@ -3,8 +3,16 @@ CI/CD 상태 - [![CI/CD](https://github.com/GoGradually/SuperBoard/actions/workf
 테스트 코드 커버리지 - [![codecov](https://codecov.io/gh/GoGradually/SuperBoard/graph/badge.svg?token=VFHVL9J58Q)](https://codecov.io/gh/GoGradually/SuperBoard)
 
 # 주요 목표
+### 비즈니스 관점
 - **사용자 간의 실시간 소통**을 킬러 기능으로 추구한다.
 - 다양한 사용자 간의 실시간 토론이 원할한 구조로 설계한다.
+
+### 개발 관점
+- 저지연, 고성능, 실시간을 추구한다.
+- DDD, 클린 아키텍처를 소프트웨어 아키텍처로 갖는다.
+- 분석 관점에서 OOA를 통해 작업의 순서를 결정한다.
+- 설계 관점에서 TDD를 통해 요구사항을 잘개 쪼갠 뒤 작업을 수행한다.
+
 
 # 주요 내용
 
